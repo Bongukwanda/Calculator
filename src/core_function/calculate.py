@@ -2,17 +2,21 @@
 
 class Calculate:
   
-  def __init__(self):
-    self.total_resultant: float = 0
+  def add(self, number_1:float, number_2:float) -> float:
+    addition_result = number_1 + number_2
+    return addition_result
   
-  def add(self, **numbers):
-    if (len(numbers) < 2):
-      return
-    
-    for number in numbers:
-      self.total_resultant += number
-    
-    return self.total_resultant
+  def subtract(self, number_1:float, number_2:float) -> float:
+    subtraction_result = number_1 - number_2
+    return subtraction_result
+  
+  def multiply(self, number_1:float, number_2:float) -> float:
+    multiplication_result = number_1 * number_2
+    return multiplication_result
+  
+  def divide(self, number_1:float, number_2:float) -> float:
+    dividend = number_1 / number_2
+    return dividend
 
 class CalculateCommand:
   def __init__(self):
@@ -25,6 +29,27 @@ class CalculateAddition(CalculateCommand):
   def __init__(self):
     super().__init__()
   
-  def execute(self, **values):
-    return self.calculate.add(values)
+  def execute(self, num_1, num_2):
+    return self.calculate.add(num_1, num_2)
+
+class CalculateSubtraction(CalculateCommand):
+  def __init__(self):
+    super().__init__()
+  
+  def execute(self, num_1, num_2):
+    return self.calculate.subtract(num_1, num_2)
+
+class CalculateMultiplication(CalculateCommand):
+  def __init__(self):
+    super().__init__()
+  
+  def execute(self, num_1, num_2):
+    return self.calculate.multiply(num_1, num_2)
+
+class CalculateDivide(CalculateCommand):
+  def __init__(self):
+    super().__init__()
+  
+  def execute(self, num_1, num_2):
+    return self.calculate.divide(num_1, num_2)
 
