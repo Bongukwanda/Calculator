@@ -1,8 +1,8 @@
-from .src.app import Calculator
+from src.app import Calculator
 
-def main():
+def run_app():
   calculator = Calculator()
   calculator.run_calculator()
 
 if __name__ == "__main__":
-  main()
+  run_app()

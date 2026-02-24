@@ -1,5 +1,3 @@
-
-
 class Calculate:
   
   def add(self, number_1:float, number_2:float) -> float:
@@ -19,37 +17,37 @@ class Calculate:
     return dividend
 
 class CalculateCommand:
-  def __init__(self):
-    self.calculate = Calculate()
-  
-  def execute(self):
-    pass
+  pass
 
 class CalculateAddition(CalculateCommand):
   def __init__(self):
     super().__init__()
+    self.calculator = Calculate()
   
   def execute(self, num_1, num_2):
-    return self.calculate.add(num_1, num_2)
+    return self.calculator.add(num_1, num_2)
 
 class CalculateSubtraction(CalculateCommand):
   def __init__(self):
     super().__init__()
+    self.calculator = Calculate()
   
   def execute(self, num_1, num_2):
-    return self.calculate.subtract(num_1, num_2)
+    return self.calculator.subtract(num_1, num_2)
 
 class CalculateMultiplication(CalculateCommand):
   def __init__(self):
     super().__init__()
+    self.calculator = Calculate
   
   def execute(self, num_1, num_2):
-    return self.calculate.multiply(num_1, num_2)
+    return self.calculator.multiply(num_1, num_2)
 
 class CalculateDivide(CalculateCommand):
   def __init__(self):
     super().__init__()
+    self.calculator = Calculate()
   
   def execute(self, num_1, num_2):
-    return self.calculate.divide(num_1, num_2)
+    return self.calculator.divide(num_1, num_2)
 
