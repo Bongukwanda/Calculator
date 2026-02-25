@@ -1,0 +1,2 @@
+Name: Calculator
+About: This is a calculator application, it will do basic arithemtic fucntions and processes.

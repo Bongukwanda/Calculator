@@ -1,8 +1,11 @@
+import tkinter as tk
 from src.app import Calculator
+from src.ui.main_window import MainWindow
 
 def run_app():
-  calculator = Calculator()
-  calculator.run_calculator()
+  root = tk.Tk()
+  app = MainWindow(root)
+  root.mainloop()
 
 if __name__ == "__main__":
   run_app()
