@@ -1,5 +1,4 @@
 import tkinter as tk
-from src.app import Calculator
 from src.ui.main_window import MainWindow
 
 def run_app():
