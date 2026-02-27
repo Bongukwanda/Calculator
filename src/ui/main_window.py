@@ -7,7 +7,7 @@ class MainWindow():
     self.root = root
     
     # ---- Basic UI ---------
-    self.root.geometry("450x350")
+    self.root.geometry("300x350")
     
     # ---- Grid Layout ------
     self.root.grid_rowconfigure(0, weight=1)
@@ -26,10 +26,20 @@ class MainWindow():
   
   def calculator_buttons(self) -> None:
     calculator_frame = tk.Frame(self.root, relief="solid")
+    # calculator_frame.grid_columnconfigure()
+    # calculator_frame.grid_rowconfigure()
+    
+    tk.Button(calculator_frame, text="1", relief="raised").grid(column=0, row=0, padx=5, pady=5)
+    tk.Button(calculator_frame, text="2", relief="raised").grid(column=1, row=0, padx=5, pady=5)
+    tk.Button(calculator_frame, text="3", relief="raised").grid(column=2, row=0, padx=5, pady=5)
+    
+    
     calculator_frame.grid(column=0, row=1, padx=5, pady=5)
   
   def number_buttons(self) -> None:
-    pass
+    button_frame = tk.Frame(self.root)
+    button_frame.grid(column=0, row=1, padx=5, pady=5)
+  
   # ----------------------------------------------------------
   # AMA-FUNCTIONS ALUPHINI KWAMANYE AMA-FUNCTIONS
   # ----------------------------------------------------------

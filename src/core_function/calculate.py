@@ -1,3 +1,5 @@
+from abc import ABC, abstractmethod
+
 class Calculate:
   
   def add(self, number_1:float, number_2:float) -> float:
@@ -15,39 +17,56 @@ class Calculate:
   def divide(self, number_1:float, number_2:float) -> float:
     dividend = number_1 / number_2
     return dividend
+  
+  def power_of(self, number:float, raise_to_value:int) -> float:
+    resultant = number ** raise_to_value
+    return resultant
+  
+  def add_parenthesis(self) -> None:
+    pass
+  
+  
 
-class CalculateCommand:
-  pass
+class CalculateCommand(ABC):
+  def __init__(self):
+    self.calculator = Calculate()
+  
+  @abstractmethod
+  def execute(self):
+    ...
 
-class CalculateAddition(CalculateCommand):
+class AdditionCommand(CalculateCommand):
   def __init__(self):
     super().__init__()
-    self.calculator = Calculate()
   
   def execute(self, num_1, num_2):
     return self.calculator.add(num_1, num_2)
 
-class CalculateSubtraction(CalculateCommand):
+class SubtractionCommand(CalculateCommand):
   def __init__(self):
     super().__init__()
-    self.calculator = Calculate()
   
   def execute(self, num_1, num_2):
     return self.calculator.subtract(num_1, num_2)
 
-class CalculateMultiplication(CalculateCommand):
+class MultiplicationCommand(CalculateCommand):
   def __init__(self):
     super().__init__()
-    self.calculator = Calculate
   
   def execute(self, num_1, num_2):
     return self.calculator.multiply(num_1, num_2)
 
-class CalculateDivide(CalculateCommand):
+class DivideCommand(CalculateCommand):
   def __init__(self):
     super().__init__()
-    self.calculator = Calculate()
   
   def execute(self, num_1, num_2):
     return self.calculator.divide(num_1, num_2)
+
+class PowerOfCommand(CalculateCommand):
+  def __init__(self):
+    super().__init__()
+  
+  def execute(self, number, power_of):
+    return self.calculator.power_of(number, power_of)
 
