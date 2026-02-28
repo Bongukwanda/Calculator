@@ -8,10 +8,14 @@ class MainWindow():
     
     # ---- Basic UI ---------
     self.root.geometry("300x350")
+    self.root.title("Calculator")
     
     # ---- Grid Layout ------
+    self.root.grid_columnconfigure(0, weight=1)
+    
     self.root.grid_rowconfigure(0, weight=1)
-    self.root.grid_rowconfigure(1, weight=2)
+    self.root.grid_rowconfigure(1, weight=1)
+    self.root.grid_rowconfigure(2, weight=1)
     
     # ---- Build UI ---------
     self.build_ui()
@@ -22,6 +26,11 @@ class MainWindow():
   
   def display_screen(self) -> None:
     screen_frame = tk.Frame(self.root, borderwidth=5, relief="solid")
+    
+    resultant_value = tk.StringVar()
+    display = tk.Message(self.root, background="white", justify="right", relief="solid", textvariable=resultant_value)
+    display.grid(columnspan=1, padx=5, pady=5, sticky="nsew")
+    
     screen_frame.grid(column=0, row=0, padx=5,pady=5)
   
   def calculator_buttons(self) -> None:
