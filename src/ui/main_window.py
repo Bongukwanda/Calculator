@@ -6,18 +6,16 @@ class MainWindow():
   def __init__(self, root: tk.Tk | None = None):
     self.root = root
     
-    # ---- Basic UI ---------
+    # ---- Basic UI Settings ---------
     self.root.geometry("300x350")
     self.root.title("Calculator")
     
-    # ---- Grid Layout ------
+    # ---- Grid Layout ---------------
     self.root.grid_columnconfigure(0, weight=1)
-    
     self.root.grid_rowconfigure(0, weight=1)
     self.root.grid_rowconfigure(1, weight=1)
-    self.root.grid_rowconfigure(2, weight=1)
     
-    # ---- Build UI ---------
+    # ---- Build UI ------------------
     self.build_ui()
   
   # ----------------------------------------------------------
@@ -29,25 +27,37 @@ class MainWindow():
     
     resultant_value = tk.StringVar()
     display = tk.Message(self.root, background="white", justify="right", relief="solid", textvariable=resultant_value)
-    display.grid(columnspan=1, padx=5, pady=5, sticky="nsew")
+    display.grid(padx=5, pady=5, sticky="nsew")
     
-    screen_frame.grid(column=0, row=0, padx=5,pady=5)
+    screen_frame.grid(column=0, row=0, padx=10,pady=10)
   
-  def calculator_buttons(self) -> None:
+  def basic_function_buttons(self) -> None:
     calculator_frame = tk.Frame(self.root, relief="solid")
-    # calculator_frame.grid_columnconfigure()
-    # calculator_frame.grid_rowconfigure()
     
-    tk.Button(calculator_frame, text="1", relief="raised").grid(column=0, row=0, padx=5, pady=5)
-    tk.Button(calculator_frame, text="2", relief="raised").grid(column=1, row=0, padx=5, pady=5)
-    tk.Button(calculator_frame, text="3", relief="raised").grid(column=2, row=0, padx=5, pady=5)
+    # ----- Numbers ----------
+    tk.Button(calculator_frame, text="1", relief="raised").grid(column=0, row=3, padx=5, pady=5)
+    tk.Button(calculator_frame, text="4", relief="raised").grid(column=0, row=2, padx=5, pady=5)
+    tk.Button(calculator_frame, text="7", relief="raised").grid(column=0, row=1, padx=5, pady=5)
     
+    tk.Button(calculator_frame, text="3", relief="raised").grid(column=2, row=3, padx=5, pady=5)
+    tk.Button(calculator_frame, text="6", relief="raised").grid(column=2, row=2, padx=5, pady=5)
+    tk.Button(calculator_frame, text="9", relief="raised").grid(column=2, row=1, padx=5, pady=5)
     
-    calculator_frame.grid(column=0, row=1, padx=5, pady=5)
-  
-  def number_buttons(self) -> None:
-    button_frame = tk.Frame(self.root)
-    button_frame.grid(column=0, row=1, padx=5, pady=5)
+    tk.Button(calculator_frame, text="2", relief="raised").grid(column=1, row=3, padx=5, pady=5)
+    tk.Button(calculator_frame, text="5", relief="raised").grid(column=1, row=2, padx=5, pady=5)
+    tk.Button(calculator_frame, text="8", relief="raised").grid(column=1, row=1, padx=5, pady=5)
+    
+    # ----- Basic Operations --
+    tk.Button(calculator_frame, text="=", relief="raised").grid(column=3, row=3, padx=5, pady=5)
+    tk.Button(calculator_frame, text="+", relief="raised").grid(column=3, row=2, padx=5, pady=5)
+    tk.Button(calculator_frame, text="-", relief="raised").grid(column=3, row=1, padx=5, pady=5)
+    
+    tk.Button(calculator_frame, text="C", relief="raised").grid(column=0, row=0, padx=5, pady=5)
+    tk.Button(calculator_frame, text="CE", relief="raised").grid(column=1, row=0, padx=5, pady=5)
+    tk.Button(calculator_frame, text="/", relief="raised").grid(column=2, row=0, padx=5, pady=5)
+    tk.Button(calculator_frame, text="x", relief="raised").grid(column=3, row=0, padx=5, pady=5)
+    
+    calculator_frame.grid(column=0, row=1, padx=5, pady=5, sticky="nswe")
   
   # ----------------------------------------------------------
   # AMA-FUNCTIONS ALUPHINI KWAMANYE AMA-FUNCTIONS
@@ -59,5 +69,8 @@ class MainWindow():
   
   def build_ui(self) -> None:
     self.display_screen() # Add display screen
-    self.calculator_buttons() # Add calculator buttons
-  
+    self.basic_function_buttons() # Add calculator buttons
+
+root = tk.Tk()
+app = MainWindow(root)
+root.mainloop()
