@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class Calculate:
+class Operations:
   
   def add(self, number_1:float, number_2:float) -> float:
     addition_result = number_1 + number_2
@@ -25,11 +25,11 @@ class Calculate:
   def add_parenthesis(self) -> None:
     pass
   
-  
+
 
 class CalculateCommand(ABC):
   def __init__(self):
-    self.calculator = Calculate()
+    self.calculator = Operations()
   
   @abstractmethod
   def execute(self):

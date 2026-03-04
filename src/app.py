@@ -1,4 +1,4 @@
-from .core_function.calculate import (
+from .core_function.operations import (
   CalculateAddition,
   CalculateSubtraction,
   CalculateMultiplication,
