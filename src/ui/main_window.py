@@ -47,7 +47,7 @@ class MainWindow():
     calculator_frame.grid_rowconfigure(3, weight=1)
     
     # ----- Numbers ----------
-    tk.Button(calculator_frame, command=self._update_display(1), text="1", relief="raised").grid(column=0, row=4, padx=5, pady=5)
+    tk.Button(calculator_frame, text="1", relief="raised").grid(column=0, row=4, padx=5, pady=5)
     tk.Button(calculator_frame, text="4", relief="raised").grid(column=0, row=3, padx=5, pady=5)
     tk.Button(calculator_frame, text="7", relief="raised").grid(column=0, row=2, padx=5, pady=5)
     
@@ -80,10 +80,6 @@ class MainWindow():
   # ----------------------------------------------------------
   # AMA-FUNCTIONS ALUPHINI KWAMANYE AMA-FUNCTIONS
   # ----------------------------------------------------------
-  
-  def _update_display(self, update_value) -> None:
-    current_text = self.resultant_value.get()
-    self.resultant_value = current_text + str(update_value)
   
   # ----------------------------------------------------------
   # HLANGANISA YONKINTO
