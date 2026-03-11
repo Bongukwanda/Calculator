@@ -1,5 +1,5 @@
 import tkinter as tk
-from core_function.operations import Operations
+from src.core_function.operations import Operations
 
 class MainWindow():
   
@@ -11,6 +11,7 @@ class MainWindow():
     self.root.title("Calculator")
     
     # ---- Something ----------------
+    self.resultant_value: tk.StringVar | None = None
     self.operator = Operations()
     
     # ---- Grid Layout ---------------
@@ -28,9 +29,7 @@ class MainWindow():
   def display_screen(self) -> None:
     screen_frame = tk.Frame(self.root, borderwidth=5, relief="solid")
     
-    resultant_value = tk.StringVar()
-    display = tk.Message(self.root, background="white", justify="right", relief="solid", textvariable=resultant_value)
-    display.grid(padx=5, pady=5, sticky="nsew")
+    tk.Message(self.root, background="white", justify="right", relief="solid", text=self.resultant_value).grid(padx=5, pady=5, sticky="nsew")
     
     screen_frame.grid(column=0, row=0, padx=10,pady=10)
   
@@ -48,7 +47,7 @@ class MainWindow():
     calculator_frame.grid_rowconfigure(3, weight=1)
     
     # ----- Numbers ----------
-    tk.Button(calculator_frame, text="1", relief="raised").grid(column=0, row=4, padx=5, pady=5)
+    tk.Button(calculator_frame, command=self._update_display(1), text="1", relief="raised").grid(column=0, row=4, padx=5, pady=5)
     tk.Button(calculator_frame, text="4", relief="raised").grid(column=0, row=3, padx=5, pady=5)
     tk.Button(calculator_frame, text="7", relief="raised").grid(column=0, row=2, padx=5, pady=5)
     
@@ -82,6 +81,10 @@ class MainWindow():
   # AMA-FUNCTIONS ALUPHINI KWAMANYE AMA-FUNCTIONS
   # ----------------------------------------------------------
   
+  def _update_display(self, update_value) -> None:
+    current_text = self.resultant_value.get()
+    self.resultant_value = current_text + str(update_value)
+  
   # ----------------------------------------------------------
   # HLANGANISA YONKINTO
   # ----------------------------------------------------------
@@ -90,6 +93,6 @@ class MainWindow():
     self.display_screen() # Add display screen
     self.basic_function_buttons() # Add calculator buttons
 
-root = tk.Tk()
-app = MainWindow(root)
-root.mainloop()
+# root = tk.Tk()
+# app = MainWindow(root)
+# root.mainloop()

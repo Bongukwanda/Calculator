@@ -26,7 +26,6 @@ class Operations:
     pass
   
 
-
 class CalculateCommand(ABC):
   def __init__(self):
     self.calculator = Operations()
