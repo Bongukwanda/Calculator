@@ -1,5 +1,5 @@
 import tkinter as tk
-from core_function.operations import Operations
+from src.core_function.operations import Operations
 
 class MainWindow():
   
@@ -34,46 +34,56 @@ class MainWindow():
   
   def basic_function_buttons(self) -> None:
     calculator_frame = tk.Frame(self.root, relief="solid")
-    calculator_frame.grid(column=0, row=1, padx=2, pady=8)
+    calculator_frame.grid(column=0, row=1, padx=4, sticky="nsew")
+    self.defualt_grid_column_weights(calculator_frame, 1)
+    self.defualt_grid_row_weights(calculator_frame, 5)
     
     first_row = tk.Frame(calculator_frame)
-    first_row.grid(column=0, row=4, sticky="nsew")
-    tk.Button(first_row, text="1", relief="raised").grid(column=0, row=0, sticky="nsew")
-    tk.Button(first_row, text="2", relief="raised").grid(column=1, row=0, sticky="nsew")
-    tk.Button(first_row, text="3", relief="raised").grid(column=2, row=0, sticky="nsew")
-    tk.Button(first_row, text="=", relief="raised").grid(column=3, row=0, sticky="nsew")
+    first_row.grid(column=0, row=4, sticky="nsew", padx=4)
+    tk.Button(first_row, text="1", relief="raised", width=5).grid(column=0, row=0)
+    tk.Button(first_row, text="2", relief="raised", width=5).grid(column=1, row=0)
+    tk.Button(first_row, text="3", relief="raised", width=5).grid(column=2, row=0)
+    tk.Button(first_row, text="=", relief="raised", width=5).grid(column=3, row=0)
     
     second_row = tk.Frame(calculator_frame)
-    second_row.grid(column=0, row=3, sticky="nsew")
-    tk.Button(second_row, text="4", relief="raised").grid(column=0, row=0, padx=5, pady=5)
-    tk.Button(second_row, text="5", relief="raised").grid(column=1, row=0, padx=5, pady=5)
-    tk.Button(second_row, text="6", relief="raised").grid(column=2, row=0, padx=5, pady=5)
-    tk.Button(second_row, text="+", relief="raised").grid(column=3, row=0, padx=5, pady=5)
+    second_row.grid(column=0, row=3, sticky="nsew", padx=4)
+    tk.Button(second_row, text="4", relief="raised", width=5).grid(column=0, row=0)
+    tk.Button(second_row, text="5", relief="raised", width=5).grid(column=1, row=0)
+    tk.Button(second_row, text="6", relief="raised", width=5).grid(column=2, row=0)
+    tk.Button(second_row, text="+", relief="raised", width=5).grid(column=3, row=0)
     
     third_row = tk.Frame(calculator_frame)
-    third_row.grid(column=0, row=2, sticky="ew")
-    tk.Button(third_row, text="7", relief="raised").grid(column=0, row=0, padx=5, pady=5)
-    tk.Button(third_row, text="8", relief="raised").grid(column=1, row=0, padx=5, pady=5)
-    tk.Button(third_row, text="9", relief="raised").grid(column=2, row=0, padx=5, pady=5)
-    tk.Button(third_row, text="-", relief="raised").grid(column=3, row=0, padx=5, pady=5)
+    third_row.grid(column=0, row=2, sticky="nsew", padx=4)
+    tk.Button(third_row, text="7", relief="raised", width=5).grid(column=0, row=0)
+    tk.Button(third_row, text="8", relief="raised", width=5).grid(column=1, row=0)
+    tk.Button(third_row, text="9", relief="raised", width=5).grid(column=2, row=0)
+    tk.Button(third_row, text="-", relief="raised", width=5).grid(column=3, row=0)
     
     fourth_row = tk.Frame(calculator_frame)
-    fourth_row.grid(column=0, row=1, sticky="ew")
-    tk.Button(fourth_row, text="C", relief="raised").grid(column=0, row=1, padx=5, pady=5)
-    tk.Button(fourth_row, text="CE", relief="raised").grid(column=1, row=1, padx=5, pady=5)
-    tk.Button(fourth_row, text="/", relief="raised").grid(column=2, row=1, padx=5, pady=5)
-    tk.Button(fourth_row, text="x", relief="raised").grid(column=3, row=1, padx=5, pady=5)
+    fourth_row.grid(column=0, row=1, sticky="nsew", padx=4)
+    tk.Button(fourth_row, text="C", relief="raised", width=5).grid(column=0, row=1)
+    tk.Button(fourth_row, text="CE", relief="raised", width=5).grid(column=1, row=1)
+    tk.Button(fourth_row, text="/", relief="raised", width=5).grid(column=2, row=1)
+    tk.Button(fourth_row, text="x", relief="raised", width=5).grid(column=3, row=1)
     
     fifth_row = tk.Frame(calculator_frame)
-    fifth_row.grid(column=0, row=0, sticky="ew")
-    tk.Button(fifth_row, text="(", relief="raised").grid(column=0, row=0, padx=5, pady=5)
-    tk.Button(fifth_row, text=")", relief="raised").grid(column=1, row=0, padx=5, pady=5)
-    tk.Button(fifth_row, text="÷", relief="raised").grid(column=2, row=0, padx=5, pady=5)
-    tk.Button(fifth_row, text="pi", relief="raised").grid(column=3, row=0, padx=5, pady=5)
+    fifth_row.grid(column=0, row=0, sticky="nsew", padx=4)
+    tk.Button(fifth_row, text="(", relief="raised", width=5).grid(column=0, row=0)
+    tk.Button(fifth_row, text=")", relief="raised", width=5).grid(column=1, row=0)
+    tk.Button(fifth_row, text="÷", relief="raised", width=5).grid(column=2, row=0)
+    tk.Button(fifth_row, text="π", relief="raised", width=5).grid(column=3, row=0)
   
   # ----------------------------------------------------------
   # AMA-FUNCTIONS ALUPHINI KWAMANYE AMA-FUNCTIONS
   # ----------------------------------------------------------
+  
+  def defualt_grid_column_weights(self, frame:tk.Misc, columns:int) -> None:
+    for column in range(columns):
+      frame.grid_columnconfigure(column, weight=1)
+  
+  def defualt_grid_row_weights(self, frame:tk.Misc, rows:int) -> None:
+    for row in range(rows):
+      frame.grid_rowconfigure(row, weight=1)
   
   # ----------------------------------------------------------
   # HLANGANISA YONKINTO
