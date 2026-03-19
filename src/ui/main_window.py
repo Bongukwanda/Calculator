@@ -12,7 +12,8 @@ class MainWindow():
     self.root.title("Calculator")
     
     # ---- Something ----------------
-    self.screen_output = tk.StringVar()
+    self.working_equation = tk.StringVar()
+    self.whole_equation = tk.StringVar()
     self.button_ops = ButtonController()
     
     # ---- Grid Layout ---------------
@@ -26,18 +27,13 @@ class MainWindow():
   # ----------------------------------------------------------
   
   def display_screen(self) -> None:
-    screen_frame = ttk.Frame(self.root, borderwidth=5, relief="flat")
-    screen_frame.grid(column=0, row=0, padx=4, pady=4)
+    screen_frame = ttk.Frame(self.root, border=2, borderwidth=5, relief="solid")
+    screen_frame.grid(column=0, row=0, padx=8, pady=8, sticky="nsew")
     
-    cal_message = ttk.Entry(
-      self.root,
-      background="white",
-      font=("Segoe UI", 10),
-      justify="right", 
-      textvariable=self.screen_output
-    )
-    cal_message.config(state="readonly")
-    cal_message.grid(row=0, column=0, sticky="nsew", padx=8, pady=8)
+    whole_equation = ttk.Label(screen_frame, anchor="n", background="white", justify="right", textvariable=self.whole_equation)
+    whole_equation.pack(fill="both", expand=True)
+    current_equation = ttk.Label(screen_frame, anchor="s", background="white", justify="right", textvariable=self.working_equation)
+    current_equation.pack(fill="both", expand=True)
   
   def build_buttons(self) -> None:
     calculator_frame = ttk.Frame(self.root)
@@ -48,66 +44,77 @@ class MainWindow():
     
     first_row = ttk.Frame(calculator_frame)
     first_row.grid(column=0, row=4, padx=4)
-    one = ttk.Button(first_row, text="1", command=lambda : self.update_equation_display("1"), width="5")
+    one = ttk.Button(first_row, text="1", command=lambda : self.update_working_equation("1"), width="5")
     one.grid(column=0, row=0)
-    two = ttk.Button(first_row, text="2", command=lambda : self.update_equation_display("2"), width="5")
+    two = ttk.Button(first_row, text="2", command=lambda : self.update_working_equation("2"), width="5")
     two.grid(column=1, row=0)
-    three = ttk.Button(first_row, text="3", command=lambda : self.update_equation_display("3"), width="5")
+    three = ttk.Button(first_row, text="3", command=lambda : self.update_working_equation("3"), width="5")
     three.grid(column=2, row=0)
     equal_to = ttk.Button(first_row, text="=", width="5")
     equal_to.grid(column=3, row=0)
     
     second_row = ttk.Frame(calculator_frame)
     second_row.grid(column=0, row=3, padx=4)
-    four = ttk.Button(second_row, text="4", command=lambda : self.update_equation_display("4"), width="5")
+    four = ttk.Button(second_row, text="4", command=lambda : self.update_working_equation("4"), width="5")
     four.grid(column=0, row=0)
-    five = ttk.Button(second_row, text="5", command=lambda : self.update_equation_display("5"), width="5")
+    five = ttk.Button(second_row, text="5", command=lambda : self.update_working_equation("5"), width="5")
     five.grid(column=1, row=0)
-    six = ttk.Button(second_row, text="6", command=lambda : self.update_equation_display("6"), width="5")
+    six = ttk.Button(second_row, text="6", command=lambda : self.update_working_equation("6"), width="5")
     six.grid(column=2, row=0)
-    plus = ttk.Button(second_row, text="+", command=lambda : self.update_equation_display(" + "), width="5")
+    plus = ttk.Button(second_row, text="+", command=lambda : self.update_whole_equation(" + "), width="5")
     plus.grid(column=3, row=0)
     
     third_row = ttk.Frame(calculator_frame)
     third_row.grid(column=0, row=2, padx=4)
-    seven = ttk.Button(third_row, text="7", command=lambda : self.update_equation_display("7"), width="5")
+    seven = ttk.Button(third_row, text="7", command=lambda : self.update_working_equation("7"), width="5")
     seven.grid(column=0, row=0)
-    eight = ttk.Button(third_row, text="8", command=lambda : self.update_equation_display("8"), width="5")
+    eight = ttk.Button(third_row, text="8", command=lambda : self.update_working_equation("8"), width="5")
     eight.grid(column=1, row=0)
-    nine = ttk.Button(third_row, text="9", command=lambda : self.update_equation_display("9"), width="5")
+    nine = ttk.Button(third_row, text="9", command=lambda : self.update_working_equation("9"), width="5")
     nine.grid(column=2, row=0)
-    minus = ttk.Button(third_row, text="-", command=lambda : self.update_equation_display(" - "), width="5")
+    minus = ttk.Button(third_row, text="-", command=lambda : self.update_whole_equation(" - "), width="5")
     minus.grid(column=3, row=0)
     
     fourth_row = ttk.Frame(calculator_frame)
     fourth_row.grid(column=0, row=1, padx=4)
-    c = ttk.Button(fourth_row, text="C", command=self.clear_equation_display, width="5")
+    c = ttk.Button(fourth_row, text="C", command=lambda : self.clear_equation("C"), width="5")
     c.grid(column=0, row=1)
-    ce = ttk.Button(fourth_row, text="CE", width="5")
+    ce = ttk.Button(fourth_row, text="CE", command=lambda : self.clear_equation("CE"), width="5")
     ce.grid(column=1, row=1)
-    divide = ttk.Button(fourth_row, text="÷", command=lambda : self.update_equation_display(" ÷ "), width="5")
+    divide = ttk.Button(fourth_row, text="÷", command=lambda : self.update_whole_equation(" ÷ "), width="5")
     divide.grid(column=2, row=1)
-    multiply = ttk.Button(fourth_row, text="x", command=lambda : self.update_equation_display(" x "), width="5")
+    multiply = ttk.Button(fourth_row, text="x", command=lambda : self.update_whole_equation(" x "), width="5")
     multiply.grid(column=3, row=1)
     
     fifth_row = ttk.Frame(calculator_frame)
     fifth_row.grid(column=0, row=0, padx=4)
-    open_bracket = ttk.Button(fifth_row, text="(",  command=lambda : self.update_equation_display("("), width="5")
+    open_bracket = ttk.Button(fifth_row, text="(",  command=lambda : self.update_working_equation("("), width="5")
     open_bracket.grid(column=0, row=0)
-    close_bracket = ttk.Button(fifth_row, text=")",  command=lambda : self.update_equation_display(")"), width="5")
+    close_bracket = ttk.Button(fifth_row, text=")",  command=lambda : self.update_working_equation(")"), width="5")
     close_bracket.grid(column=1, row=0)
     pi = ttk.Button(fifth_row, text="π", width="5")
     pi.grid(column=2, row=0)
-    raise_to = ttk.Button(fifth_row, text="^", command=lambda : self.update_equation_display("^"), width="5")
+    raise_to = ttk.Button(fifth_row, text="^", command=lambda : self.update_working_equation("^"), width="5")
     raise_to.grid(column=3, row=0)
   
-  def update_equation_display(self, execution:str, event=None) -> None:
-    current_equation = self.screen_output.get().strip()
-    current_equation += execution
-    self.screen_output.set(current_equation)
+  # ----------------------------------------------------------
   
-  def clear_equation_display(self, event=None) -> None:
-    self.screen_output.set("")
+  def update_working_equation(self, execution:str, event=None) -> None:
+    current_equation = self.working_equation.get().strip()
+    current_equation += execution
+    self.working_equation.set(current_equation)
+  
+  def update_whole_equation(self, execution:str, event=None) -> None:
+    working_equation = self.working_equation.get().strip()
+    whole_equation = self.whole_equation.get().strip()
+    current_equation = whole_equation + execution + working_equation
+    self.whole_equation.set(current_equation)
+  
+  def clear_equation(self, operation:str, event=None) -> None:
+    if operation == "CE":
+      self.whole_equation.set("")
+    else:
+      self.working_equation.set("")
   
   # -----------------------------------------------
   
@@ -118,7 +125,6 @@ class MainWindow():
   def defualt_grid_row_weights(self, frame:tk.Misc, rows:int) -> None:
     for row in range(rows):
       frame.grid_rowconfigure(row, weight=1)
-  
   
   # ----------------------------------------------------------
   
