@@ -14,6 +14,9 @@ class MainWindow():
     # ---- Something ----------------
     self.working_equation = tk.StringVar()
     self.whole_equation = tk.StringVar()
+    self.parenthesis = True
+    
+    # ---- Services -----------------
     self.button_ops = ButtonController()
     
     # ---- Grid Layout ---------------
@@ -88,9 +91,9 @@ class MainWindow():
     
     fifth_row = ttk.Frame(calculator_frame)
     fifth_row.grid(column=0, row=0, padx=4)
-    open_bracket = ttk.Button(fifth_row, text="(",  command=lambda : self.update_working_equation("("), width="5")
+    open_bracket = ttk.Button(fifth_row, text="(",  command=lambda : self.update_working_equation(" ( "), width="5")
     open_bracket.grid(column=0, row=0)
-    close_bracket = ttk.Button(fifth_row, text=")",  command=lambda : self.update_working_equation(")"), width="5")
+    close_bracket = ttk.Button(fifth_row, text=")",  command=lambda : self.update_working_equation(" ) "), width="5")
     close_bracket.grid(column=1, row=0)
     pi = ttk.Button(fifth_row, text="π", width="5")
     pi.grid(column=2, row=0)
@@ -106,9 +109,19 @@ class MainWindow():
   
   def update_whole_equation(self, execution:str, event=None) -> None:
     working_equation = self.working_equation.get().strip()
-    whole_equation = self.whole_equation.get().strip()
-    current_equation = whole_equation + execution + working_equation
+    whole_equation = self.whole_equation.get()
+    current_equation = ""
+    
+    if whole_equation == "" or whole_equation is None:
+      current_equation = working_equation + execution
+    else:
+      current_equation = whole_equation + working_equation + execution
+    
     self.whole_equation.set(current_equation)
+    self.clear_equation("C")
+  
+  def update_special_key(self, key:str, event=None) -> None:
+    pass
   
   def clear_equation(self, operation:str, event=None) -> None:
     if operation == "CE":
