@@ -14,6 +14,10 @@ class ButtonController:
   
   # -------------------------------------
   
+  def power_of(self):
+    pass
+  
+  
   def update_equation(self, equation_update, equation_value: str) -> None:
     if equation_value == "numbers":
       self.equation[equation_value].append(equation_update)
