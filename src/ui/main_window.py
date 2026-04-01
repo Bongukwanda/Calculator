@@ -14,7 +14,7 @@ class MainWindow():
     # ---- Something ----------------
     self.working_equation = tk.StringVar()
     self.whole_equation = tk.StringVar()
-    self.parenthesis = True
+    self.parenthesis = 0
     self.equation_answered = False
     
     self.equation = []
@@ -95,13 +95,13 @@ class MainWindow():
     
     fifth_row = ttk.Frame(calculator_frame)
     fifth_row.grid(column=0, row=0, padx=4)
-    open_bracket = ttk.Button(fifth_row, text="(",  command=lambda : self.update_working_equation(" ( "), width="5")
+    open_bracket = ttk.Button(fifth_row, text="(",  command=lambda : self.press_function("("), width="5")
     open_bracket.grid(column=0, row=0)
-    close_bracket = ttk.Button(fifth_row, text=")",  command=lambda : self.update_working_equation(" ) "), width="5")
+    close_bracket = ttk.Button(fifth_row, text=")",  command=lambda : self.press_function(")"), width="5")
     close_bracket.grid(column=1, row=0)
     pi = ttk.Button(fifth_row, text="π", width="5")
     pi.grid(column=2, row=0)
-    raise_to = ttk.Button(fifth_row, text="^", command=lambda : self.update_working_equation("^"), width="5")
+    raise_to = ttk.Button(fifth_row, text="^", command=lambda : self.press_function("^"), width="5")
     raise_to.grid(column=3, row=0)
   
   # ----------------------------------------------------------
@@ -125,6 +125,14 @@ class MainWindow():
         self.operation.append("multiply")
       case "÷":
         self.operation.append("divide")
+      case "π":
+        self.operation.append("pi")
+      case "^":
+        self.operation.append("raise_to")
+      case "(":
+        self.parenthesis += 1
+      case ")":
+        self.parenthesis -= 1
       case _:
         pass
     
@@ -134,6 +142,9 @@ class MainWindow():
   def press_equal(self, event=None) -> None:    
     
     resultant = 0
+    
+    if not self.parenthesis_check():
+      return
     
     if not len(self.operation):
       return
@@ -165,6 +176,20 @@ class MainWindow():
         else:
           resultant /= value
     
+    if "pi" in self.operation:
+      for index, value in enumerate(self.equation):
+        if index == 0:
+          resultant += value
+        else:
+          resultant *= value
+    
+    if "raise_to" in self.operation:
+      for index, value in enumerate(self.equation):
+        if index == 0:
+          resultant += value
+        else:
+          resultant **= value
+    
     self.clear_equation("CE")
     self.working_equation.set(resultant)
   
@@ -176,6 +201,12 @@ class MainWindow():
       self.equation.clear()
     else:
       self.working_equation.set("")
+  
+  def parenthesis_check(self) -> bool:
+    if self.parenthesis == 0:
+      return True
+    
+    return False
   
   def update_working_equation(self, execution:str, event=None) -> None:
     current_equation = self.working_equation.get().strip()
