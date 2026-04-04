@@ -1,33 +1,79 @@
-
 class Operations:
   
-  def add(self, *numbers:list[float]) -> float:
-    result = 0
-    for number in numbers:
-      result += number
-    return result
+  BODMAS = {
+    "PARENTHESIS":5,
+    "DIVISION": 4,
+    "MULTIPLICATION": 3,
+    "ADDITION": 2,
+    "SUBTRACTION": 1
+  }
   
-  def subtract(self, *numbers:list[float]) -> float:
-    result = numbers[0]
-    for number in range(1, len(numbers)):
-      result -= number
-    return result
+  def __init__(self, equation: list):
+    self.equation = equation
+    self.resultant = 0
   
-  def multiply(self, number_1:float, number_2:float) -> float:
-    multiplication_result = number_1 * number_2
-    return multiplication_result
+  # ----- Operations -----
   
-  def divide(self, number_1:float, number_2:float) -> float:
-    dividend = number_1 / number_2
-    return dividend
+  def add(self) -> float:
+    self.resultant = sum(self.equation)
+    return self.resultant
   
-  def power_of(self, number:float, raise_to_value:int) -> float:
-    resultant = number ** raise_to_value
-    return resultant
+  def subtract(self) -> float:
+    for index, value in enumerate(self.equation):
+      if index == 0:
+        self.resultant += value
+      else:
+        self.resultant -= value
+    
+    return self.resultant
   
-  def add_parenthesis(self) -> None:
-    pass
+  def mulitply(self) -> float:
+    for index, value in enumerate(self.equation):
+      if index == 0:
+        self.resultant += value
+      else:
+        self.resultant *= value
+    
+    return self.resultant
   
-  def equal_to(self) -> float:
-    return 0
+  def divide(self) -> float:
+    for index, value in enumerate(self.equation):
+      if index == 0:
+        self.resultant += value
+      else:
+        self.resultant /= value
+    
+    return self.resultant
+  
+  def exponentiate(self) -> float:
+    for index, value in enumerate(self.equation):
+      if index == 0:
+        self.resultant += value
+      else:
+        self.resultant **= value
+    
+    return self.resultant
+  
+  # ----- Resultant -----
+  
+  def output_resultant(self, operation: dict) -> float:
+    
+    for ops, values in operation:
+      match ops:
+        case "add":
+          self.resultant = sum(values)
+        case _:
+          pass
+    
+    return self.resultant
+  
+  
+  # ----- Helper ----
+  
+  def is_number(self, value) -> bool:
+    try:
+      float(value)
+      return True
+    except ValueError:
+      return False
   

@@ -1,6 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
-from services.button_controller import ButtonController
+from services.commands import (
+  Addition,
+  Subtraction,
+  Muliplication,
+  Division,
+  Exponentiation
+)
 
 class MainWindow():
   
@@ -21,7 +27,6 @@ class MainWindow():
     self.operation = []
     
     # ---- Services -----------------
-    self.button_ops = ButtonController()
     
     # ---- Grid Layout ---------------
     self.root.grid_columnconfigure(0, weight=1)
@@ -118,17 +123,17 @@ class MainWindow():
     
     match key:
       case "+":
-        self.operation.append("add")
+        self.equation.append("add")
       case "-":
-        self.operation.append("subtract")
+        self.equation.append("subtract")
       case "x":
-        self.operation.append("multiply")
+        self.equation.append("multiply")
       case "÷":
-        self.operation.append("divide")
+        self.equation.append("divide")
       case "π":
-        self.operation.append("pi")
+        self.equation.append("pi")
       case "^":
-        self.operation.append("raise_to")
+        self.equation.append("exponentiate")
       case "(":
         self.parenthesis += 1
       case ")":
@@ -140,41 +145,22 @@ class MainWindow():
     self.update_whole_equation(key_value)
   
   def press_equal(self, event=None) -> None:    
+    if not self.checks():
+      return
     
     resultant = 0
     
-    if not self.parenthesis_check():
-      return
-    
-    if not len(self.operation):
-      return
-    
-    if not len(self.equation):
-      return
-    
     if "add" in self.operation:
-      resultant = sum(self.equation)
+      resultant = Addition(self.equation).execute()
     
     if "subtract" in self.operation:
-      for index, value in enumerate(self.equation):
-        if index == 0:
-          resultant += value
-        else:
-          resultant -= value
+      resultant = Subtraction(self.equation).execute()
     
     if "multiply" in self.operation:
-      for index, value in enumerate(self.equation):
-        if index == 0:
-          resultant += value
-        else:
-          resultant *= value
+      resultant = Muliplication(self.equation).execute()
     
     if "divide" in self.operation:
-      for index, value in enumerate(self.equation):
-        if index == 0:
-          resultant += value
-        else:
-          resultant /= value
+      resultant = Division(self.equation).execute()
     
     if "pi" in self.operation:
       for index, value in enumerate(self.equation):
@@ -183,15 +169,12 @@ class MainWindow():
         else:
           resultant *= value
     
-    if "raise_to" in self.operation:
-      for index, value in enumerate(self.equation):
-        if index == 0:
-          resultant += value
-        else:
-          resultant **= value
+    if "exponentiate" in self.operation:
+      resultant = Exponentiation(self.equation).execute()
     
     self.clear_equation("CE")
     self.working_equation.set(resultant)
+    self.equation.append(resultant)
   
   def clear_equation(self, operation:str, event=None) -> None:
     if operation == "CE":
@@ -235,6 +218,18 @@ class MainWindow():
   def defualt_grid_row_weights(self, frame:tk.Misc, rows:int) -> None:
     for row in range(rows):
       frame.grid_rowconfigure(row, weight=1)
+  
+  def checks(self) -> bool:
+    if not self.parenthesis_check():
+      return False
+    
+    if not len(self.operation):
+      return False
+    
+    if not len(self.equation):
+      return False
+    
+    return True
   
   # ----------------------------------------------------------
   
