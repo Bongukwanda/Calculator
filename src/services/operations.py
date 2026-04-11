@@ -12,7 +12,7 @@ class Operations:
     self.equation = equation
     self.resultant = 0
   
-  # ----- Operations -----
+  # ----- Calculation -----
   
   def add(self) -> float:
     self.resultant = sum(self.equation)
@@ -54,6 +54,18 @@ class Operations:
     
     return self.resultant
   
+  def pi_calculation(self) -> str:
+    print("pi not calclulated yet")
+    return 0
+  
+  # ----- BODMAS -----
+  
+  def operation_order(self, equation: dict):
+    for bodmas_attribute in self.BODMAS:
+      for key in equation:
+        if key == bodmas_attribute:
+          print(self.BODMAS[bodmas_attribute])
+  
   # ----- Resultant -----
   
   def output_resultant(self, operation: dict) -> float:
@@ -67,7 +79,6 @@ class Operations:
     
     return self.resultant
   
-  
   # ----- Helper ----
   
   def is_number(self, value) -> bool:
@@ -77,3 +88,13 @@ class Operations:
     except ValueError:
       return False
   
+
+
+'''
+dict = {
+  "add": [1],
+  "parenthesis": [],
+  "subtract": [9,5],
+  "parenthesis": []
+}
+'''

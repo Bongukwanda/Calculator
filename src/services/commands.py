@@ -52,3 +52,10 @@ class Exponentiation(CommandBase):
   
   def execute(self):
     return self.controller.exponentiate()
+
+class Pi(CommandBase):
+  def __init__(self, equation):
+    super().__init__(equation)
+  
+  def execute(self):
+    return self.controller.pi_calculation()
