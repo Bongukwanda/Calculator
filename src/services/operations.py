@@ -88,13 +88,3 @@ class Operations:
     except ValueError:
       return False
   
-
-
-'''
-dict = {
-  "add": [1],
-  "parenthesis": [],
-  "subtract": [9,5],
-  "parenthesis": []
-}
-'''

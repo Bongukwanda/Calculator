@@ -13,31 +13,27 @@ class MainWindow():
   def __init__(self, root: tk.Tk | None = None):
     self.root = root
     
-    # ---- Basic UI Settings ---------
+    # ---- Basic UI Settings ----
     self.root.geometry("200x280")
     self.root.title("Calculator")
     
-    # ---- Something ----------------
+    # ---- Something ----
     self.working_equation = tk.StringVar()
     self.whole_equation = tk.StringVar()
     
     self._parenthesis = 0
     self.equation_answered = False
     
-    self.equation = []
-    self.operation = []
+    self.operation = [] # holds the operation to do
+    self.my_equation = [] # holds the values the calculation will use
+    self.my_dict = {} # holds the whole equation and values assocaited
     
-    self.my_equation = []
-    self.my_dict = {}
-    
-    # ---- Services -----------------
-    
-    # ---- Grid Layout ---------------
+    # ---- Grid Layout ----
     self.root.grid_columnconfigure(0, weight=1)
     self.root.grid_rowconfigure(0, weight=1)
     self.root.grid_rowconfigure(1, weight=1)
     
-    # ---- Build UI ------------------
+    # ---- Build UI ----
     self.build_ui()
   
   # =============================
@@ -68,7 +64,7 @@ class MainWindow():
     two.grid(column=1, row=0)
     three = ttk.Button(first_row, text="3", command=lambda : self.press_number(3), width="5")
     three.grid(column=2, row=0)
-    equal_to = ttk.Button(first_row, text="=", command=lambda : self.press_equal(), width="5")
+    equal_to = ttk.Button(first_row, text="=", command=self.press_equal, width="5")
     equal_to.grid(column=3, row=0)
     
     second_row = ttk.Frame(calculator_frame)
@@ -95,9 +91,9 @@ class MainWindow():
     
     fourth_row = ttk.Frame(calculator_frame)
     fourth_row.grid(column=0, row=1, padx=4)
-    c = ttk.Button(fourth_row, text="C", command=lambda : self.clear_basic(), width="5")
+    c = ttk.Button(fourth_row, text="C", command=self.clear_basic, width="5")
     c.grid(column=0, row=1)
-    ce = ttk.Button(fourth_row, text="CE", command=lambda : self.clear_equation(), width="5")
+    ce = ttk.Button(fourth_row, text="CE", command=self.clear_equation, width="5")
     ce.grid(column=1, row=1)
     divide = ttk.Button(fourth_row, text="÷", command=lambda : self.press_operator("÷"), width="5")
     divide.grid(column=2, row=1)
@@ -132,10 +128,9 @@ class MainWindow():
       return
     
     if self.equation_answered:
-      print("Singenile after resultant")
-      number = int(self.working_equation.get())
-      print("number: ", number)
+      number = float(self.working_equation.get())
       self.my_equation.append(number)
+      self.equation_answered = False
     
     match key:
       case "+":
@@ -193,7 +188,6 @@ class MainWindow():
     self.clear_equation()
     self.equation_answered = True
     self.working_equation.set(resultant)
-    self.equation.append(resultant)
   
   def function(self, key: str) -> None:
     if len(self.my_dict) == 0:
@@ -212,8 +206,8 @@ class MainWindow():
     self.whole_equation.set("")
     self.working_equation.set("")
     self.operation.clear()
-    self.equation.clear()
     self.my_equation.clear()
+    self.my_dict.clear()
   
   # =============================
   # HELPER
