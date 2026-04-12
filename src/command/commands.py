@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
-from services.operations import Operations
+from services.calculations import Calculations
 
 
 class CommandBase(ABC):
   def __init__(self, equation: list):
     super().__init__()
-    self.controller = Operations(equation)
+    self.controller = Calculations(equation)
   
   @abstractmethod
   def execute(self):
