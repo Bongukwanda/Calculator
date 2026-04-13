@@ -6,7 +6,11 @@ from command.commands import (
   Muliplication,
   Division,
   Exponentiation,
-  Pi)
+  Pi,
+  OperationUpdate,
+)
+
+from services.operations import Operations
 
 class MainWindow():
   
@@ -27,6 +31,9 @@ class MainWindow():
     self.operation = [] # holds the operation to do
     self.my_equation = [] # holds the values the calculation will use
     self.my_dict = {} # holds the whole equation and values assocaited
+    
+    # ---- Services ----
+    self.ops = Operations(self.operation, self.my_equation)
     
     # ---- Grid Layout ----
     self.root.grid_columnconfigure(0, weight=1)
@@ -124,39 +131,12 @@ class MainWindow():
     self._update_working_equation(str(number))
   
   def press_operator(self, key: str, event=None) -> None:
-    if not key:
-      return
-    
     if self.equation_answered:
       number = float(self.working_equation.get())
       self.my_equation.append(number)
       self.equation_answered = False
     
-    match key:
-      case "+":
-        self.operation.append("add")
-        function_key = "add"
-      case "-":
-        self.operation.append("subtract")
-        function_key = "subtract"
-      case "x":
-        self.operation.append("multiply")
-        function_key = "multiply"
-      case "÷":
-        self.operation.append("divide")
-        function_key = "divide"
-      case "π":
-        self.operation.append("pi")
-        function_key = "pi"
-      case "^":
-        self.operation.append("exponentiate")
-        function_key = "exponentiate"
-      case "(":
-        self._parenthesis += 1
-      case ")":
-        self._parenthesis -= 1
-      case _:
-        pass
+    function_key = OperationUpdate(self.ops, key).execute()
     
     self._update_whole_equation(key)
     self.function(function_key)
@@ -168,22 +148,22 @@ class MainWindow():
     resultant = 0
     
     if "add" in self.operation:
-      resultant = Addition(self.my_equation).execute()
+      resultant = Addition(self.ops).execute()
     
     if "subtract" in self.operation:
-      resultant = Subtraction(self.my_equation).execute()
+      resultant = Subtraction(self.ops).execute()
     
     if "multiply" in self.operation:
-      resultant = Muliplication(self.my_equation).execute()
+      resultant = Muliplication(self.ops).execute()
     
     if "divide" in self.operation:
-      resultant = Division(self.my_equation).execute()
+      resultant = Division(self.ops).execute()
     
     if "pi" in self.operation:
-      resultant = Pi(self.my_equation).execute()
+      resultant = Pi(self.ops).execute()
     
     if "exponentiate" in self.operation:
-      resultant = Exponentiation(self.my_equation).execute()
+      resultant = Exponentiation(self.ops).execute()
     
     self.clear_equation()
     self.equation_answered = True

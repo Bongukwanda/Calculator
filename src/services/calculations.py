@@ -8,18 +8,17 @@ class Calculations:
     "SUBTRACTION": 1
   }
   
-  def __init__(self, equation: list):
-    self.equation = equation
+  def __init__(self):
     self.resultant = 0
   
   # ----- Calculation -----
   
-  def add(self) -> float:
-    self.resultant = sum(self.equation)
+  def add(self, equation: list) -> float:
+    self.resultant = sum(equation)
     return self.resultant
   
-  def subtract(self) -> float:
-    for index, value in enumerate(self.equation):
+  def subtract(self, equation: list) -> float:
+    for index, value in enumerate(equation):
       if index == 0:
         self.resultant += value
       else:
@@ -27,8 +26,8 @@ class Calculations:
     
     return self.resultant
   
-  def mulitply(self) -> float:
-    for index, value in enumerate(self.equation):
+  def mulitply(self, equation: list) -> float:
+    for index, value in enumerate(equation):
       if index == 0:
         self.resultant += value
       else:
@@ -36,8 +35,8 @@ class Calculations:
     
     return self.resultant
   
-  def divide(self) -> float:
-    for index, value in enumerate(self.equation):
+  def divide(self, equation: list) -> float:
+    for index, value in enumerate(equation):
       if index == 0:
         self.resultant += value
       else:
@@ -45,8 +44,8 @@ class Calculations:
     
     return self.resultant
   
-  def exponentiate(self) -> float:
-    for index, value in enumerate(self.equation):
+  def exponentiate(self, equation: list) -> float:
+    for index, value in enumerate(equation):
       if index == 0:
         self.resultant += value
       else:
@@ -54,7 +53,7 @@ class Calculations:
     
     return self.resultant
   
-  def pi_calculation(self) -> str:
+  def pi_calculation(self, equation: list) -> str:
     print("pi not calclulated yet")
     return 0
   

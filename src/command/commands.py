@@ -1,61 +1,53 @@
+from __future__ import annotations
 from abc import ABC, abstractmethod
 from services.calculations import Calculations
 
 
 class CommandBase(ABC):
-  def __init__(self, equation: list):
+  def __init__(self, operation):
     super().__init__()
-    self.controller = Calculations(equation)
+    self.operation = operation
   
   @abstractmethod
   def execute(self):
     ...
 
-class Resultant(CommandBase):
-  def __init__(self, equation_list: list):
-    super().__init__(equation_list)
-  
-  def execute(self):
-    return self.controller.output_resultant()
+# ===========
 
 class Addition(CommandBase):
-  def __init__(self, equation_list: list):
-    super().__init__(equation_list)
-  
   def execute(self):
-    return self.controller.add()
+    return self.operation.addition()
 
 class Subtraction(CommandBase):
-  def __init__(self, equation_list: list):
-    super().__init__(equation_list)
-  
   def execute(self):
-    return self.controller.subtract()
+    return self.operation.subtraction()
 
 class Muliplication(CommandBase):
-  def __init__(self, equation_list: list):
-    super().__init__(equation_list)
-  
   def execute(self):
-    return self.controller.mulitply()
+    return self.operation.mulitplication()
 
 class Division(CommandBase):
-  def __init__(self, equation_list: list):
-    super().__init__(equation_list)
-  
   def execute(self):
-    return self.controller.divide()
+    return self.operation.division()
 
 class Exponentiation(CommandBase):
-  def __init__(self, equation_list: list):
-    super().__init__(equation_list)
-  
   def execute(self):
-    return self.controller.exponentiate()
+    return self.operation.exponentiation()
 
 class Pi(CommandBase):
-  def __init__(self, equation):
-    super().__init__(equation)
+  def execute(self):
+    return self.operation.pi_calculation()
+
+# ===========
+
+class OperationUpdate(CommandBase):
+  def __init__(self, operation, key: str):
+    super().__init__(operation)
+    self.key = key
   
   def execute(self):
-    return self.controller.pi_calculation()
+    return self.operation.press_operator(self.key)
+
+class Resultant(CommandBase):
+  def execute(self):
+    return self.operation.output_resultant()
