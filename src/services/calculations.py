@@ -14,8 +14,8 @@ class Calculations:
   # ----- Calculation -----
   
   def add(self, equation: list) -> float:
-    self.resultant = sum(equation)
-    return self.resultant
+    print("Calculations - self.equation: ", equation)
+    return sum(equation)
   
   def subtract(self, equation: list) -> float:
     for index, value in enumerate(equation):
@@ -57,17 +57,10 @@ class Calculations:
     print("pi not calclulated yet")
     return 0
   
-  # ----- BODMAS -----
-  
-  def operation_order(self, equation: dict):
-    for bodmas_attribute in self.BODMAS:
-      for key in equation:
-        if key == bodmas_attribute:
-          print(self.BODMAS[bodmas_attribute])
   
   # ----- Resultant -----
   
-  def output_resultant(self, operation: dict) -> float:
+  def calculate_result(self, operation: dict) -> float:
     
     for ops, values in operation:
       match ops:

@@ -1,13 +1,11 @@
 import tkinter as tk
 from tkinter import ttk
-from command.commands import (
-  Addition,
-  Subtraction,
-  Muliplication,
-  Division,
-  Exponentiation,
-  Pi,
+
+from commands.commands import (
   OperationUpdate,
+  ClearCommand,
+  NumberPressCommand,
+  Resultant
 )
 
 from services.operations import Operations
@@ -15,30 +13,20 @@ from services.operations import Operations
 class MainWindow():
   
   def __init__(self, root: tk.Tk | None = None):
-    self.root = root
     
-    # ---- Basic UI Settings ----
+    self.root = root
     self.root.geometry("200x280")
     self.root.title("Calculator")
     
-    # ---- Something ----
+    # ---- UI/UX ----
     self.working_equation = tk.StringVar()
     self.whole_equation = tk.StringVar()
-    
-    self._parenthesis = 0
-    self.equation_answered = False
-    
-    self.operation = [] # holds the operation to do
-    self.my_equation = [] # holds the values the calculation will use
-    self.my_dict = {} # holds the whole equation and values assocaited
-    
-    # ---- Services ----
-    self.ops = Operations(self.operation, self.my_equation)
-    
-    # ---- Grid Layout ----
     self.root.grid_columnconfigure(0, weight=1)
     self.root.grid_rowconfigure(0, weight=1)
     self.root.grid_rowconfigure(1, weight=1)
+    
+    # ---- Services ----
+    self.ops = Operations(self.operation, self.my_equation)
     
     # ---- Build UI ----
     self.build_ui()
@@ -123,93 +111,31 @@ class MainWindow():
   # =============================
   
   def press_number(self, number: int, event=None) -> None:
-    if self.equation_answered:
-      self.clear_basic()
-      self.equation_answered = False
-    
-    self.my_equation.append(number)
+    NumberPressCommand(self.ops, number).execute()
     self._update_working_equation(str(number))
   
   def press_operator(self, key: str, event=None) -> None:
-    if self.equation_answered:
-      number = float(self.working_equation.get())
-      self.my_equation.append(number)
-      self.equation_answered = False
-    
-    function_key = OperationUpdate(self.ops, key).execute()
-    
+    OperationUpdate(self.ops, key).execute()
     self._update_whole_equation(key)
-    self.function(function_key)
   
   def press_equal(self, event=None) -> None:    
-    if not self._checks():
-      return
-    
-    resultant = 0
-    
-    if "add" in self.operation:
-      resultant = Addition(self.ops).execute()
-    
-    if "subtract" in self.operation:
-      resultant = Subtraction(self.ops).execute()
-    
-    if "multiply" in self.operation:
-      resultant = Muliplication(self.ops).execute()
-    
-    if "divide" in self.operation:
-      resultant = Division(self.ops).execute()
-    
-    if "pi" in self.operation:
-      resultant = Pi(self.ops).execute()
-    
-    if "exponentiate" in self.operation:
-      resultant = Exponentiation(self.ops).execute()
-    
+    resultant = Resultant(self.ops).execute()
     self.clear_equation()
     self.equation_answered = True
     self.working_equation.set(resultant)
   
-  def function(self, key: str) -> None:
-    if len(self.my_dict) == 0:
-      self.my_dict[key] = [value for value in self.my_equation]
-    else:
-      temp_list = self.my_dict[key]
-      for value in self.my_equation:
-        temp_list.append(value)
-      self.my_dict[key] = temp_list
-  
   def clear_basic(self, event=None) -> None:
     self.working_equation.set("")
-    self.my_equation.clear()
+    ClearCommand(self.ops).execute
   
   def clear_equation(self, event=None) -> None:
     self.whole_equation.set("")
     self.working_equation.set("")
-    self.operation.clear()
-    self.my_equation.clear()
-    self.my_dict.clear()
+    ClearCommand(self.ops, "all").execute
   
   # =============================
   # HELPER
   # =============================
-  
-  def _checks(self) -> bool:
-    if not self._parenthesis_check():
-      return False
-    
-    if not len(self.operation):
-      return False
-    
-    if not len(self.my_equation):
-      return False
-    
-    return True
-  
-  def _parenthesis_check(self) -> bool:
-    if self._parenthesis == 0:
-      return True
-    
-    return False
   
   def _update_working_equation(self, execution:str, event=None) -> None:
     current_equation = self.working_equation.get().strip()
@@ -229,10 +155,6 @@ class MainWindow():
     
     self.whole_equation.set(current_equation)
     self.working_equation.set("")
-  
-  def _output_resultant(self, resultant: str) -> None:
-    self.whole_equation.set("")
-    self.working_equation.set(resultant)
   
   def _defualt_grid_column_weights(self, frame:tk.Misc, columns:int) -> None:
     for column in range(columns):
