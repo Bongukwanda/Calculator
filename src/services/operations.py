@@ -3,16 +3,26 @@ from .calculations import Calculations
 
 class Operations:
   
-  def __init__(self, operation: list, equation: list):
+  FUNCTIONS = {
+    "+" : "add", 
+    "-" : "subtract",
+    "x" : "multiply", 
+    "÷" : "divide", 
+    "π" : "pi", 
+    "^" : "exponentiate"
+  }
+  
+  def __init__(self):
     self.calc = Calculations()
     
     # Calculation list
-    self.operation = operation
-    self.equation = equation
+    self.operation = []
+    self.equation = []
     
     # Calculation variables
     self._parenthesis = 0
     self.equation_answered = False
+    self.equation_cleared = True
   
   # calculation
   
@@ -32,58 +42,45 @@ class Operations:
     return answer
   
   def exponentiation(self) -> float:
-    answer = self.calc.exponentiate()
+    answer = self.calc.exponentiate(self.equation)
     return answer
   
   # calculator functions
   
-  def clear_basic(self, clearance: str = "") -> None:
-    if not clearance:
+  def clear_basic(self, clearance: str) -> None:
+    if clearance:
       self.operation.clear()
-      self.my_equation.clear()
+      self.equation.clear()
     else:
-      self.my_equation.clear()
+      self.equation.clear()
   
-  def press_number(self, number: int) -> None:
+  def press_number(self) -> None:
     if self.equation_answered:
       self.clear_basic()
       self.equation_answered = False
-    
-    self.equation.append(number)
   
-  def press_operator(self, key: str, previous_answer:float = 0) -> None:
+  def press_operator(self, key: str, entered_number: float) -> None:
     if self.equation_answered:
-      number = float(previous_answer)
+      number = float(entered_number)
       self.equation.append(number)
       self.equation_answered = False
     
-    match key:
-      case "+":
-        self.operation.append("add")
-      case "-":
-        self.operation.append("subtract")
-      case "x":
-        self.operation.append("multiply")
-      case "÷":
-        self.operation.append("divide")
-      case "π":
-        self.operation.append("pi")
-      case "^":
-        self.operation.append("exponentiate")
-      case "(":
-        self._parenthesis += 1
-      case ")":
-        self._parenthesis -= 1
-      case _:
-        pass
+    else:
+      self.equation.append(entered_number)
+    
+    try:
+      self.operation.append(self.FUNCTIONS[key])
+    except Exception:
+      return
   
-  def press_equal(self) -> float:
+  def press_equal(self, entered_number: float | None = None) -> float:
+    if entered_number is not None:
+      self.equation.append(entered_number)
+    
     if not self._checks():
       return
     
     resultant = 0
-    
-    print("Operations - self.operation: ", self.operation)
     
     if "add" in self.operation:
       resultant = self.addition()
@@ -99,11 +96,19 @@ class Operations:
     
     if "exponentiate" in self.operation:
       resultant = self.exponentiation()
-      
-    print("Press Equal Operations = ", resultant)
+    
     return resultant
   
   # helpers
+  
+  def function(self, key: str) -> None:
+    if len(self.my_dict) == 0:
+      self.my_dict[key] = [value for value in self.my_equation]
+    else:
+      temp_list = self.my_dict[key]
+      for value in self.my_equation:
+        temp_list.append(value)
+      self.my_dict[key] = temp_list
   
   def _parenthesis_check(self) -> bool:
     if self._parenthesis == 0:
@@ -120,14 +125,4 @@ class Operations:
       return False
     
     return True
-  
-  def function(self, key: str) -> None:
-    if len(self.my_dict) == 0:
-      self.my_dict[key] = [value for value in self.my_equation]
-    else:
-      temp_list = self.my_dict[key]
-      for value in self.my_equation:
-        temp_list.append(value)
-      self.my_dict[key] = temp_list
-  
   

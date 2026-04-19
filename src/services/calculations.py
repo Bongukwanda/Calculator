@@ -57,7 +57,6 @@ class Calculations:
     print("pi not calclulated yet")
     return 0
   
-  
   # ----- Resultant -----
   
   def calculate_result(self, operation: dict) -> float:

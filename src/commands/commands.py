@@ -1,11 +1,10 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 
-
 class CommandBase(ABC):
-  def __init__(self, operation):
+  def __init__(self, receiever):
     super().__init__()
-    self.operation = operation
+    self.receiever = receiever
   
   @abstractmethod
   def execute(self):
@@ -14,29 +13,33 @@ class CommandBase(ABC):
 # ===========
 
 class ClearCommand(CommandBase):
-  def __init__(self, operation, clearance: str = ""):
-    super().__init__(operation)
+  def __init__(self, receiever, clearance: str = ""):
+    super().__init__(receiever)
     self.clear = clearance
   
   def execute(self):
-    self.operation.clear_basic(self.clear)
+    self.receiever.clear_basic(self.clear)
 
 class NumberPressCommand(CommandBase):
-  def __init__(self, operation, number: float):
-    super().__init__(operation)
-    self.num = number
+  def __init__(self, receiever):
+    super().__init__(receiever)
   
   def execute(self):
-    self.operation.press_number(self.num)
+    self.receiever.press_number()
 
 class OperationUpdate(CommandBase):
-  def __init__(self, operation, key: str):
-    super().__init__(operation)
+  def __init__(self, receiever, key: str, entered_number: float):
+    super().__init__(receiever)
     self.key = key
+    self.number = entered_number
   
   def execute(self):
-    return self.operation.press_operator(self.key)
+    return self.receiever.press_operator(self.key, self.number)
 
 class Resultant(CommandBase):
+  def __init__(self, receiever, entered_number: float | None = None):
+    super().__init__(receiever)
+    self.number = entered_number
+  
   def execute(self):
-    return self.operation.press_equal()
+    return self.receiever.press_equal(self.number)

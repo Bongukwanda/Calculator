@@ -26,7 +26,7 @@ class MainWindow():
     self.root.grid_rowconfigure(1, weight=1)
     
     # ---- Services ----
-    self.ops = Operations(self.operation, self.my_equation)
+    self.ops = Operations()
     
     # ---- Build UI ----
     self.build_ui()
@@ -111,27 +111,28 @@ class MainWindow():
   # =============================
   
   def press_number(self, number: int, event=None) -> None:
-    NumberPressCommand(self.ops, number).execute()
+    NumberPressCommand(self.ops).execute()
     self._update_working_equation(str(number))
   
   def press_operator(self, key: str, event=None) -> None:
-    OperationUpdate(self.ops, key).execute()
+    number = float(self.working_equation.get())
+    OperationUpdate(self.ops, key, number).execute()
     self._update_whole_equation(key)
   
-  def press_equal(self, event=None) -> None:    
-    resultant = Resultant(self.ops).execute()
+  def press_equal(self, event=None) -> None: 
+    number = float(self.working_equation.get())   
+    resultant = Resultant(self.ops, number).execute()
     self.clear_equation()
-    self.equation_answered = True
     self.working_equation.set(resultant)
   
   def clear_basic(self, event=None) -> None:
     self.working_equation.set("")
-    ClearCommand(self.ops).execute
+    ClearCommand(self.ops).execute()
   
   def clear_equation(self, event=None) -> None:
-    self.whole_equation.set("")
     self.working_equation.set("")
-    ClearCommand(self.ops, "all").execute
+    self.whole_equation.set("")
+    ClearCommand(self.ops, "all").execute()
   
   # =============================
   # HELPER
