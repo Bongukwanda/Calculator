@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 class Calculations:
   
   BODMAS = {
@@ -14,7 +16,7 @@ class Calculations:
   # ----- Calculation -----
   
   def add(self, equation: list) -> float:
-    print("Calculations - self.equation: ", equation)
+    print(equation)
     return sum(equation)
   
   def subtract(self, equation: list) -> float:
@@ -54,28 +56,5 @@ class Calculations:
     return self.resultant
   
   def pi_calculation(self, equation: list) -> str:
-    print("pi not calclulated yet")
-    return 0
-  
-  # ----- Resultant -----
-  
-  def calculate_result(self, operation: dict) -> float:
-    
-    for ops, values in operation:
-      match ops:
-        case "add":
-          self.resultant = sum(values)
-        case _:
-          pass
-    
-    return self.resultant
-  
-  # ----- Helper ----
-  
-  def is_number(self, value) -> bool:
-    try:
-      float(value)
-      return True
-    except ValueError:
-      return False
+    raise NotImplementedError("Not implemented yet")
   

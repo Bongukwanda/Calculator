@@ -1,3 +1,4 @@
+from __future__ import annotations
 import tkinter as tk
 from tkinter import ttk
 
@@ -5,6 +6,7 @@ from commands.commands import (
   OperationUpdate,
   ClearCommand,
   NumberPressCommand,
+  SpeacialKeyCommand,
   Resultant
 )
 
@@ -97,11 +99,11 @@ class MainWindow():
     
     fifth_row = ttk.Frame(calculator_frame)
     fifth_row.grid(column=0, row=0, padx=4)
-    open_bracket = ttk.Button(fifth_row, text="(",  command=lambda : self.press_operator("("), width="5")
+    open_bracket = ttk.Button(fifth_row, text="(",  command=lambda : self.press_key("("), width="5")
     open_bracket.grid(column=0, row=0)
-    close_bracket = ttk.Button(fifth_row, text=")",  command=lambda : self.press_operator(")"), width="5")
+    close_bracket = ttk.Button(fifth_row, text=")",  command=lambda : self.press_key(")"), width="5")
     close_bracket.grid(column=1, row=0)
-    pi = ttk.Button(fifth_row, text="π", width="5")
+    pi = ttk.Button(fifth_row, text="π", command=lambda : self.press_key("π"), width="5")
     pi.grid(column=2, row=0)
     raise_to = ttk.Button(fifth_row, text="^", command=lambda : self.press_operator("^"), width="5")
     raise_to.grid(column=3, row=0)
@@ -119,15 +121,20 @@ class MainWindow():
     OperationUpdate(self.ops, key, number).execute()
     self._update_whole_equation(key)
   
+  def press_key(self, key: str, event=None) -> None:
+    SpeacialKeyCommand(self.ops, key).execute()
+    self._update_whole_equation(key)
+  
   def press_equal(self, event=None) -> None: 
-    number = float(self.working_equation.get())   
+    number = self.whole_equation.get()
+    print("last number: ", number)   
     resultant = Resultant(self.ops, number).execute()
     self.clear_equation()
     self.working_equation.set(resultant)
   
   def clear_basic(self, event=None) -> None:
     self.working_equation.set("")
-    ClearCommand(self.ops).execute()
+    ClearCommand(self.ops, "").execute()
   
   def clear_equation(self, event=None) -> None:
     self.working_equation.set("")

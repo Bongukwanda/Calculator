@@ -1,4 +1,3 @@
-from __future__ import annotations
 from abc import ABC, abstractmethod
 
 class CommandBase(ABC):
@@ -13,7 +12,7 @@ class CommandBase(ABC):
 # ===========
 
 class ClearCommand(CommandBase):
-  def __init__(self, receiever, clearance: str = ""):
+  def __init__(self, receiever, clearance):
     super().__init__(receiever)
     self.clear = clearance
   
@@ -28,7 +27,7 @@ class NumberPressCommand(CommandBase):
     self.receiever.press_number()
 
 class OperationUpdate(CommandBase):
-  def __init__(self, receiever, key: str, entered_number: float):
+  def __init__(self, receiever, key, entered_number):
     super().__init__(receiever)
     self.key = key
     self.number = entered_number
@@ -36,8 +35,16 @@ class OperationUpdate(CommandBase):
   def execute(self):
     return self.receiever.press_operator(self.key, self.number)
 
+class SpeacialKeyCommand(CommandBase):
+  def __init__(self, receiever, key):
+    super().__init__(receiever)
+    self.key = key
+  
+  def execute(self):
+    self.receiever.press_key(self.key)
+
 class Resultant(CommandBase):
-  def __init__(self, receiever, entered_number: float | None = None):
+  def __init__(self, receiever, entered_number):
     super().__init__(receiever)
     self.number = entered_number
   

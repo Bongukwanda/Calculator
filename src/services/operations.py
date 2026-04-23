@@ -1,4 +1,7 @@
 from __future__ import annotations
+
+import re
+import math
 from .calculations import Calculations
 
 class Operations:
@@ -8,9 +11,10 @@ class Operations:
     "-" : "subtract",
     "x" : "multiply", 
     "÷" : "divide", 
-    "π" : "pi", 
     "^" : "exponentiate"
   }
+  
+  KEYS = {"π", "(", ")"}
   
   def __init__(self):
     self.calc = Calculations()
@@ -73,8 +77,23 @@ class Operations:
     except Exception:
       return
   
-  def press_equal(self, entered_number: float | None = None) -> float:
+  def press_key(self, key: str):
+    if key not in self.KEYS:
+      return
+    
+    if key == "(":
+      self._parenthesis += 1
+    
+    elif key == ")":
+      self._parenthesis -= 1
+    
+    else:
+      self.equation.append(math.pi)
+  
+  def press_equal(self, entered_number: str | None = None) -> float:
+    print("entered number: ", entered_number)
     if entered_number is not None:
+      entered_number = self._remove_parenthesis(entered_number)
       self.equation.append(entered_number)
     
     if not self._checks():
@@ -125,4 +144,12 @@ class Operations:
       return False
     
     return True
+  
+  def _remove_parenthesis(self, value: str) -> float:
+    value_split = re.findall("[0-9]", value)
+    new_value = ""
+    for char in value_split:
+      new_value += char
+    
+    return float(new_value)
   
