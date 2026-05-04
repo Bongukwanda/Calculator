@@ -1,60 +1,48 @@
 from __future__ import annotations
 
-class Calculations:
+def add(equation: list) -> float:
+  return sum(equation)
+
+def subtract(equation: list) -> float:
+  resultant = 0
+  for index, value in enumerate(equation):
+    if index == 0:
+      resultant = value
+    else:
+      resultant -= value
   
-  BODMAS = {
-    "PARENTHESIS":5,
-    "DIVISION": 4,
-    "MULTIPLICATION": 3,
-    "ADDITION": 2,
-    "SUBTRACTION": 1
-  }
+  return resultant
+
+def mulitply(equation: list) -> float:
+  resultant = 0
+  for index, value in enumerate(equation):
+    if index == 0:
+      resultant = value
+    else:
+      resultant *= value
   
-  def __init__(self):
-    self.resultant = 0
+  return resultant
+
+def divide(equation: list) -> float:
+  resultant = 0
+  for index, value in enumerate(equation):
+    if index == 0:
+      resultant = value
+    else:
+      resultant /= value
   
-  # ----- Calculation -----
+  return resultant
+
+def exponentiate(equation: list) -> float:
+  resultant = 0
+  for index, value in enumerate(equation):
+    if index == 0:
+      resultant = value
+    else:
+      resultant **= value
   
-  def add(self, equation: list) -> float:
-    print(equation)
-    return sum(equation)
-  
-  def subtract(self, equation: list) -> float:
-    for index, value in enumerate(equation):
-      if index == 0:
-        self.resultant += value
-      else:
-        self.resultant -= value
-    
-    return self.resultant
-  
-  def mulitply(self, equation: list) -> float:
-    for index, value in enumerate(equation):
-      if index == 0:
-        self.resultant += value
-      else:
-        self.resultant *= value
-    
-    return self.resultant
-  
-  def divide(self, equation: list) -> float:
-    for index, value in enumerate(equation):
-      if index == 0:
-        self.resultant += value
-      else:
-        self.resultant /= value
-    
-    return self.resultant
-  
-  def exponentiate(self, equation: list) -> float:
-    for index, value in enumerate(equation):
-      if index == 0:
-        self.resultant += value
-      else:
-        self.resultant **= value
-    
-    return self.resultant
-  
-  def pi_calculation(self, equation: list) -> str:
-    raise NotImplementedError("Not implemented yet")
-  
+  return resultant
+
+def pi_calculation(equation: list) -> str:
+  raise NotImplementedError("Not implemented yet")
+

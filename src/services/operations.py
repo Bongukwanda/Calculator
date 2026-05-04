@@ -1,8 +1,5 @@
 from __future__ import annotations
-
-import re
-import math
-from .calculations import Calculations
+from . import calculations as calc
 
 class Operations:
   
@@ -13,88 +10,27 @@ class Operations:
     "÷" : "divide", 
     "^" : "exponentiate"
   }
-  
-  KEYS = {"π", "(", ")"}
+  NUMBERS = {"1","2","3","4","5","6","7","8","9","0"}
+  BRACES = {"(": 1, ")": -1}
   
   def __init__(self):
-    self.calc = Calculations()
-    
-    # Calculation list
     self.operation = []
     self.equation = []
     
-    # Calculation variables
     self._parenthesis = 0
-    self.equation_answered = False
-    self.equation_cleared = True
+    self.equation_answered = 0
   
   # calculation
   
-  def addition(self) -> float:
-    return self.calc.add(self.equation)
-  
-  def subtraction(self) -> float:
-    answer = self.calc.subtract(self.equation)
-    return answer
-  
-  def mulitplication(self) -> float:
-    answer = self.calc.mulitply(self.equation)
-    return answer
-  
-  def division(self) -> float:
-    answer = self.calc.divide(self.equation)
-    return answer
-  
-  def exponentiation(self) -> float:
-    answer = self.calc.exponentiate(self.equation)
-    return answer
-  
-  # calculator functions
-  
-  def clear_basic(self, clearance: str) -> None:
-    if clearance:
+  def clear_equation(self, clear_type: int) -> None:
+    if clear_type:
+      self.equation.clear()
+    else:
       self.operation.clear()
       self.equation.clear()
-    else:
-      self.equation.clear()
   
-  def press_number(self) -> None:
-    if self.equation_answered:
-      self.clear_basic()
-      self.equation_answered = False
-  
-  def press_operator(self, key: str, entered_number: float) -> None:
-    if self.equation_answered:
-      number = float(entered_number)
-      self.equation.append(number)
-      self.equation_answered = False
-    
-    else:
-      self.equation.append(entered_number)
-    
-    try:
-      self.operation.append(self.FUNCTIONS[key])
-    except Exception:
-      return
-  
-  def press_key(self, key: str):
-    if key not in self.KEYS:
-      return
-    
-    if key == "(":
-      self._parenthesis += 1
-    
-    elif key == ")":
-      self._parenthesis -= 1
-    
-    else:
-      self.equation.append(math.pi)
-  
-  def press_equal(self, entered_number: str | None = None) -> float:
-    print("entered number: ", entered_number)
-    if entered_number is not None:
-      entered_number = self._remove_parenthesis(entered_number)
-      self.equation.append(entered_number)
+  def calculate_answer(self, equation: str) -> float | int:
+    self._get_operational_equation(equation)
     
     if not self._checks():
       return
@@ -102,38 +38,26 @@ class Operations:
     resultant = 0
     
     if "add" in self.operation:
-      resultant = self.addition()
+      resultant = calc.add(self.equation)
     
     if "subtract" in self.operation:
-      resultant = self.subtraction()
+      resultant = calc.subtract(self.equation)
     
     if "multiply" in self.operation:
-      resultant = self.mulitplication()
+      resultant = calc.mulitply(self.equation)
     
     if "divide" in self.operation:
-      resultant = self.division()
+      resultant = calc.divide(self.equation)
     
     if "exponentiate" in self.operation:
-      resultant = self.exponentiation()
+      resultant = calc.exponentiate(self.equation)
+    
+    if resultant % 1 == 0:
+      resultant = int(resultant)
     
     return resultant
   
   # helpers
-  
-  def function(self, key: str) -> None:
-    if len(self.my_dict) == 0:
-      self.my_dict[key] = [value for value in self.my_equation]
-    else:
-      temp_list = self.my_dict[key]
-      for value in self.my_equation:
-        temp_list.append(value)
-      self.my_dict[key] = temp_list
-  
-  def _parenthesis_check(self) -> bool:
-    if self._parenthesis == 0:
-      return True
-    
-    return False
   
   def _checks(self) -> bool:
     
@@ -143,13 +67,40 @@ class Operations:
     if not len(self.equation):
       return False
     
+    if not self._parenthesis == 0:
+      return False
+    
     return True
   
-  def _remove_parenthesis(self, value: str) -> float:
-    value_split = re.findall("[0-9]", value)
-    new_value = ""
-    for char in value_split:
-      new_value += char
+  def _get_operational_equation(self, string_equation: str) -> None:
+    string_equation = string_equation.strip()
+    actual_number = ""
     
-    return float(new_value)
+    for i in range(len(string_equation)):
+      char = string_equation[i]
+      
+      if char in self.BRACES:
+        self._parenthesis += self.BRACES[char]
+      
+      elif char in self.FUNCTIONS:
+        self.operation.append(self.FUNCTIONS[char])
+        self.equation.append(float(actual_number))
+        actual_number = ""
+      
+      elif i == (len(string_equation)-1):
+        if char in self.NUMBERS:
+          actual_number += char
+        
+        self.equation.append(float(actual_number))
+        actual_number = ""
+      
+      elif char == "." or char == ",":
+        actual_number += "."
+      
+      elif char in self.NUMBERS:
+        actual_number += char
+      
+      else:
+        pass
+  
   
