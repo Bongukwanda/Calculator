@@ -1,4 +1,5 @@
 from __future__ import annotations
+import math
 from . import calculations as calc
 
 class Operations:
@@ -11,13 +12,11 @@ class Operations:
     "^" : "exponentiate"
   }
   NUMBERS = {"1","2","3","4","5","6","7","8","9","0"}
-  BRACES = {"(": 1, ")": -1}
   
   def __init__(self):
     self.operation = []
     self.equation = []
-    
-    self._parenthesis = 0
+    self.check_equation = ""
     self.equation_answered = 0
   
   # calculation
@@ -67,22 +66,60 @@ class Operations:
     if not len(self.equation):
       return False
     
-    if not self._parenthesis == 0:
-      return False
-    
     return True
   
+  def _check_parenthesis(self, string_equation: str) -> bool:
+    parenthesis = 0
+    new_equation = ""
+    
+    for char in string_equation:
+      if char == "(":
+        parenthesis += 1
+      elif char == ")":
+        parenthesis -= 1
+      else:
+        new_equation += char
+    
+    if parenthesis == 0 or parenthesis == 1:
+      self.check_equation = new_equation
+      return True
+    else:
+      return False
+  
+  def check_symbols(self) -> None:
+    new_equation = ""
+    equation = self.check_equation
+    
+    if not equation:
+      return 
+    
+    for i in range(len(equation)):
+      char = equation[i]
+      if char == "." or char == ",":
+        new_equation += "."
+      elif char == " ":
+        pass
+      elif char == "π":
+        new_equation += str(math.pi)
+      else:
+        new_equation += char
+    
+    self.check_equation = new_equation
+  
   def _get_operational_equation(self, string_equation: str) -> None:
-    string_equation = string_equation.strip()
+    check_braces = self._check_parenthesis(string_equation)
+    if not check_braces:
+      return
+    
+    self.check_symbols()
+    
+    string_equation = self.check_equation.strip()
     actual_number = ""
     
     for i in range(len(string_equation)):
       char = string_equation[i]
       
-      if char in self.BRACES:
-        self._parenthesis += self.BRACES[char]
-      
-      elif char in self.FUNCTIONS:
+      if char in self.FUNCTIONS:
         self.operation.append(self.FUNCTIONS[char])
         self.equation.append(float(actual_number))
         actual_number = ""
@@ -90,17 +127,10 @@ class Operations:
       elif i == (len(string_equation)-1):
         if char in self.NUMBERS:
           actual_number += char
-        
         self.equation.append(float(actual_number))
         actual_number = ""
       
-      elif char == "." or char == ",":
-        actual_number += "."
-      
-      elif char in self.NUMBERS:
-        actual_number += char
-      
       else:
-        pass
+        actual_number += char
   
   

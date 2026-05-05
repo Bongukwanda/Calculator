@@ -43,6 +43,3 @@ def exponentiate(equation: list) -> float:
   
   return resultant
 
-def pi_calculation(equation: list) -> str:
-  raise NotImplementedError("Not implemented yet")
-

@@ -48,7 +48,7 @@ class MainWindow():
     
     negative_row = ttk.Frame(calculator_frame)
     negative_row.grid(column=0, row=5, padx=4)
-    ttk.Button(negative_row, text="+/-", command=lambda : self.press_operator("-"), width="5").grid(column=0, row=0)
+    ttk.Button(negative_row, text="+/-", command=self.negate, width="5").grid(column=0, row=0)
     ttk.Button(negative_row, text="0", command=lambda : self.press_number("0"), width="5").grid(column=1, row=0)
     ttk.Button(negative_row, text=",", command=lambda : self.press_number(","), width="5").grid(column=2, row=0)
     ttk.Button(negative_row, text="=", command=self.press_equal, width="5").grid(column=3, row=0)
@@ -79,7 +79,7 @@ class MainWindow():
     ttk.Button(fourth_row, text="C", command=lambda : self.clear_equation(1), width="5").grid(column=0, row=0)
     ttk.Button(fourth_row, text="CE", command=lambda : self.clear_equation(0), width="5").grid(column=1, row=0)
     ttk.Button(fourth_row, text="÷", command=lambda : self.press_operator("÷"), width="5").grid(column=2, row=0)
-    ttk.Button(fourth_row, text="⌫ ", width="5").grid(column=3, row=0)
+    ttk.Button(fourth_row, text="⌫ ", command=self.backspace, width="5").grid(column=3, row=0)
     
     fifth_row = ttk.Frame(calculator_frame)
     fifth_row.grid(column=0, row=0, padx=4)
@@ -95,6 +95,29 @@ class MainWindow():
   
   def press_operator(self, operator: str, event=None) -> None:
     self._update_whole_equation(operator)
+  
+  def backspace(self, event=None) -> None:
+    current_equation = self.working_equation.get()
+    current_whole = self.whole_equation.get()
+    
+    if current_equation != "" and current_equation != None:
+      self.working_equation.set(current_equation[:-1])
+    
+    elif current_whole != "" and current_whole != None:
+      self.whole_equation.set(current_whole[:-2])
+    
+    else:
+      return
+  
+  def negate(self, event=None) -> None:
+    current_number = self.working_equation.get()
+    if not current_number:
+      return
+    
+    if current_number.startswith("-"):
+      self.working_equation.set(current_number[1:].lstrip())
+    else:
+      self.working_equation.set("- " + current_number)
   
   def press_equal(self, event=None) -> None: 
     final_equation = self._update_final_equation()
@@ -129,7 +152,7 @@ class MainWindow():
     working_equation = self.working_equation.get().strip()
     whole_equation = self.whole_equation.get()
     current_equation = ""
-    execution = " " + execution + " "
+    execution = " " + execution
     
     if not whole_equation:
       current_equation = working_equation + execution
@@ -158,7 +181,14 @@ class MainWindow():
   
   # UI SERVICES
   
+  def bind_services(self) -> None:
+    for i in range(10):
+      self.root.bind(f"<KeyPress-{i}>", lambda e, num = i : self.press_number(f"{num}"))
+    
+    self.root.bind("<BackSpace>", self.backspace)
+  
   def build_ui(self) -> None:
     self.display_screen()
     self.build_buttons()
+    self.bind_services()
   
