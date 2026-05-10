@@ -48,10 +48,9 @@ class MainWindow():
     
     negative_row = ttk.Frame(calculator_frame)
     negative_row.grid(column=0, row=5, padx=4)
-    ttk.Button(negative_row, text="+/-", command=self.negate, width="5").grid(column=0, row=0)
     ttk.Button(negative_row, text="0", command=lambda : self.press_number("0"), width="5").grid(column=1, row=0)
     ttk.Button(negative_row, text=",", command=lambda : self.press_number(","), width="5").grid(column=2, row=0)
-    ttk.Button(negative_row, text="=", command=self.press_equal, width="5").grid(column=3, row=0)
+    ttk.Button(negative_row, text="=", command=self.equal, width="5").grid(column=3, row=0)
     
     first_row = ttk.Frame(calculator_frame)
     first_row.grid(column=0, row=4, padx=4)
@@ -76,8 +75,8 @@ class MainWindow():
     
     fourth_row = ttk.Frame(calculator_frame)
     fourth_row.grid(column=0, row=1, padx=4)
-    ttk.Button(fourth_row, text="C", command=lambda : self.clear_equation(1), width="5").grid(column=0, row=0)
-    ttk.Button(fourth_row, text="CE", command=lambda : self.clear_equation(0), width="5").grid(column=1, row=0)
+    ttk.Button(fourth_row, text="C", command=lambda : self.clear(1), width="5").grid(column=0, row=0)
+    ttk.Button(fourth_row, text="CE", command=lambda : self.clear(0), width="5").grid(column=1, row=0)
     ttk.Button(fourth_row, text="÷", command=lambda : self.press_operator("÷"), width="5").grid(column=2, row=0)
     ttk.Button(fourth_row, text="⌫ ", command=self.backspace, width="5").grid(column=3, row=0)
     
@@ -110,21 +109,30 @@ class MainWindow():
       return
   
   def negate(self, event=None) -> None:
+    number = True
     current_number = self.working_equation.get()
     if not current_number:
       return
     
-    if current_number.startswith("-"):
-      self.working_equation.set(current_number[1:].lstrip())
+    try:
+      float(current_number)
+    except ValueError:
+      number = False
+    
+    if number:
+      if current_number.startswith("-"):
+        self.working_equation.set(current_number[1:].lstrip())
+      else:
+        self.working_equation.set("- " + current_number)
     else:
-      self.working_equation.set("- " + current_number)
+      return
   
-  def press_equal(self, event=None) -> None: 
+  def equal(self, event=None) -> None: 
     final_equation = self._update_final_equation()
     resultant = Resultant(self.ops, final_equation).execute()
-    self._update_result(resultant)
+    self._output_result(resultant)
   
-  def clear_equation(self, clear_type: int, event=None) -> None:
+  def clear(self, clear_type: int, event=None) -> None:
     if clear_type:
       self.working_equation.set("")
     else:
@@ -175,8 +183,8 @@ class MainWindow():
     
     return final_equation
   
-  def _update_result(self, result: float) -> None:
-    self.clear_equation(0)
+  def _output_result(self, result: float) -> None:
+    self.clear(0)
     self.working_equation.set(result)
   
   # UI SERVICES
@@ -186,6 +194,7 @@ class MainWindow():
       self.root.bind(f"<KeyPress-{i}>", lambda e, num = i : self.press_number(f"{num}"))
     
     self.root.bind("<BackSpace>", self.backspace)
+    self.root.bind("<Return>", self.equal)
   
   def build_ui(self) -> None:
     self.display_screen()

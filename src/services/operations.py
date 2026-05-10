@@ -28,11 +28,11 @@ class Operations:
       self.operation.clear()
       self.equation.clear()
   
-  def calculate_answer(self, equation: str) -> float | int:
+  def calculate_answer(self, equation: str):
     self._get_operational_equation(equation)
     
     if not self._checks():
-      return
+      return ""
     
     resultant = 0
     
@@ -86,9 +86,9 @@ class Operations:
     else:
       return False
   
-  def check_symbols(self) -> None:
+  def _check_symbols(self) -> None:
     new_equation = ""
-    equation = self.check_equation
+    equation = self.check_equation.strip()
     
     if not equation:
       return 
@@ -104,14 +104,14 @@ class Operations:
       else:
         new_equation += char
     
-    self.check_equation = new_equation
+    self.check_equation = new_equation.lstrip()
   
   def _get_operational_equation(self, string_equation: str) -> None:
     check_braces = self._check_parenthesis(string_equation)
     if not check_braces:
       return
     
-    self.check_symbols()
+    self._check_symbols()
     
     string_equation = self.check_equation.strip()
     actual_number = ""
@@ -120,9 +120,12 @@ class Operations:
       char = string_equation[i]
       
       if char in self.FUNCTIONS:
-        self.operation.append(self.FUNCTIONS[char])
-        self.equation.append(float(actual_number))
-        actual_number = ""
+        try:
+          self.operation.append(self.FUNCTIONS[char])
+          self.equation.append(float(actual_number))
+          actual_number = ""
+        except ValueError:
+          print("Weh")
       
       elif i == (len(string_equation)-1):
         if char in self.NUMBERS:
@@ -132,5 +135,4 @@ class Operations:
       
       else:
         actual_number += char
-  
   
