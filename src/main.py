@@ -3,7 +3,7 @@ from ui.main_window import MainWindow
 
 def run_app():
   root = tk.Tk()
-  app = MainWindow(root)
+  MainWindow(root)
   root.mainloop()
 
 if __name__ == "__main__":
