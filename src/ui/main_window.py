@@ -108,25 +108,6 @@ class MainWindow():
     else:
       return
   
-  def negate(self, event=None) -> None:
-    number = True
-    current_number = self.working_equation.get()
-    if not current_number:
-      return
-    
-    try:
-      float(current_number)
-    except ValueError:
-      number = False
-    
-    if number:
-      if current_number.startswith("-"):
-        self.working_equation.set(current_number[1:].lstrip())
-      else:
-        self.working_equation.set("- " + current_number)
-    else:
-      return
-  
   def equal(self, event=None) -> None: 
     final_equation = self._update_final_equation()
     resultant = Resultant(self.ops, final_equation).execute()

@@ -28,8 +28,10 @@ class Operations:
       self.operation.clear()
       self.equation.clear()
   
-  def calculate_answer(self, equation: str):
-    self._get_operational_equation(equation)
+  def calculate_answer(self, equation: str) -> float | int | str:
+    op_equation = self._get_operational_equation(equation)
+    if op_equation is not None:
+      return ""
     
     if not self._checks():
       return ""
@@ -106,10 +108,10 @@ class Operations:
     
     self.check_equation = new_equation.lstrip()
   
-  def _get_operational_equation(self, string_equation: str) -> None:
+  def _get_operational_equation(self, string_equation: str) -> None | str:
     check_braces = self._check_parenthesis(string_equation)
     if not check_braces:
-      return
+      return ""
     
     self._check_symbols()
     
@@ -125,12 +127,15 @@ class Operations:
           self.equation.append(float(actual_number))
           actual_number = ""
         except ValueError:
-          print("Weh")
+          return ""
       
       elif i == (len(string_equation)-1):
         if char in self.NUMBERS:
           actual_number += char
-        self.equation.append(float(actual_number))
+        try:
+          self.equation.append(float(actual_number))
+        except ValueError:
+          return ""
         actual_number = ""
       
       else:
