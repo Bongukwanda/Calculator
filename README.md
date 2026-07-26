@@ -12,7 +12,7 @@ Python
 
 ## Project Description
 This applictaion has two parts the User Interface and the functionality.
-User Interface: This will be the part the user will interact with and press buttons to use and engage with the associated fucntions to do the calculations and the processes asscociated with the calculator
-Functionality: This is the functions and processes python runs to execute the request for calculations the user will be doing. This will inlcude error handling and processing the information.
+  - User Interface: This will be the part the user will interact with and press buttons to use and engage with the associated fucntions to do the calculations and the processes asscociated with the calculator
+  - Functionality: This is the functions and processes python runs to execute the request for calculations the user will be doing. This will inlcude error handling and processing the information.
 
 This project has to environment, dev(development) and production, dev serves a means for development & testing grounds, and production serves an environment to hold running & executable code that has the fully functioning app.
