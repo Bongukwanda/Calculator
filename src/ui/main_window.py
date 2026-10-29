@@ -89,11 +89,23 @@ class MainWindow():
   
   # FUNCTION 
   
+  """
+    Press should have only have one
+    method that updates the equation
+    Adding to the string list, adding to
+    the numbers and operations to be executed
+  """
   def press_number(self, number: str, event=None) -> None:
     self._update_working_equation(number)
   
   def press_operator(self, operator: str, event=None) -> None:
     self._update_whole_equation(operator)
+  
+  """
+    backspace should do two things
+    1. update currently updated display of equation
+    2. remove the operator and/or number
+  """
   
   def backspace(self, event=None) -> None:
     current_equation = self.working_equation.get()
@@ -108,10 +120,20 @@ class MainWindow():
     else:
       return
   
+  """
+    Equal method should then do the calculation
+    ,send the list, receive it back, and 
+    update the dispaly
+  """
   def equal(self, event=None) -> None: 
     final_equation = self._update_final_equation()
     resultant = Resultant(self.ops, final_equation).execute()
     self._output_result(resultant)
+  
+  """
+  C: clears everything in the equation
+  CE: clears the numbers/operators in deciding
+  """
   
   def clear(self, clear_type: int, event=None) -> None:
     if clear_type:
@@ -122,6 +144,9 @@ class MainWindow():
     
     ClearCommand(self.ops, clear_type).execute()
   
+  """
+    Update the below accordingly
+  """
   # HELPER
   
   def _defualt_grid_column_weights(self, frame:tk.Misc, columns:int) -> None:
