@@ -16,6 +16,11 @@ class MainWindow():
     self.root.title("Calculator")
     
     # ---- UI/UX ----
+    
+    # new equation list
+    self.equation: list = []
+    self.equation_display = tk.StringVar()
+    
     self.working_equation = tk.StringVar()
     self.whole_equation = tk.StringVar()
     self.root.grid_columnconfigure(0, weight=1)
@@ -33,11 +38,15 @@ class MainWindow():
   def display_screen(self) -> None:
     screen_frame = ttk.Frame(self.root, border=2, borderwidth=5, relief="solid")
     screen_frame.grid(column=0, row=0, padx=8, pady=8, sticky="nsew")
-    
-    whole_equation = ttk.Label(screen_frame, anchor="se", background="white", textvariable=self.whole_equation)
+    whole_equation = ttk.Label(screen_frame, anchor="se", background="white", textvariable=self.equation_display,)
     whole_equation.pack(fill="both", expand=True)
-    current_equation = ttk.Label(screen_frame, anchor="se", background="white", textvariable=self.working_equation)
-    current_equation.pack(fill="both", expand=True)
+    
+    def wrap_display(event):
+      wrap_width = event.width - 20
+      if wrap_width > 0:
+        whole_equation.config(wraplength=wrap_width)
+    
+    screen_frame.bind("<Configure>", wrap_display)
   
   def build_buttons(self) -> None:
     calculator_frame = ttk.Frame(self.root)
@@ -48,105 +57,82 @@ class MainWindow():
     
     negative_row = ttk.Frame(calculator_frame)
     negative_row.grid(column=0, row=5, padx=4)
-    ttk.Button(negative_row, text="0", command=lambda : self.press_number("0"), width="5").grid(column=1, row=0)
-    ttk.Button(negative_row, text=",", command=lambda : self.press_number(","), width="5").grid(column=2, row=0)
+    ttk.Button(negative_row, text="0", command=lambda : self.update_display("0"), width="5").grid(column=1, row=0)
+    ttk.Button(negative_row, text=",", command=lambda : self.update_display(","), width="5").grid(column=2, row=0)
     ttk.Button(negative_row, text="=", command=self.equal, width="5").grid(column=3, row=0)
     
     first_row = ttk.Frame(calculator_frame)
     first_row.grid(column=0, row=4, padx=4)
-    ttk.Button(first_row, text="1", command=lambda : self.press_number("1"), width="5").grid(column=0, row=0)
-    ttk.Button(first_row, text="2", command=lambda : self.press_number("2"), width="5").grid(column=1, row=0)
-    ttk.Button(first_row, text="3", command=lambda : self.press_number("3"), width="5").grid(column=2, row=0)
-    ttk.Button(first_row, text="+", command=lambda : self.press_operator("+"), width="5").grid(column=3, row=0)
+    ttk.Button(first_row, text="1", command=lambda : self.update_display("1"), width="5").grid(column=0, row=0)
+    ttk.Button(first_row, text="2", command=lambda : self.update_display("2"), width="5").grid(column=1, row=0)
+    ttk.Button(first_row, text="3", command=lambda : self.update_display("3"), width="5").grid(column=2, row=0)
+    ttk.Button(first_row, text="+", command=lambda : self.update_display("+"), width="5").grid(column=3, row=0)
     
     second_row = ttk.Frame(calculator_frame)
     second_row.grid(column=0, row=3, padx=4)
-    ttk.Button(second_row, text="4", command=lambda : self.press_number("4"), width="5").grid(column=0, row=0)
-    ttk.Button(second_row, text="5", command=lambda : self.press_number("5"), width="5").grid(column=1, row=0)
-    ttk.Button(second_row, text="6", command=lambda : self.press_number("6"), width="5").grid(column=2, row=0)
-    ttk.Button(second_row, text="-", command=lambda : self.press_operator("-"), width="5").grid(column=3, row=0)
+    ttk.Button(second_row, text="4", command=lambda : self.update_display("4"), width="5").grid(column=0, row=0)
+    ttk.Button(second_row, text="5", command=lambda : self.update_display("5"), width="5").grid(column=1, row=0)
+    ttk.Button(second_row, text="6", command=lambda : self.update_display("6"), width="5").grid(column=2, row=0)
+    ttk.Button(second_row, text="-", command=lambda : self.update_display("-"), width="5").grid(column=3, row=0)
     
     third_row = ttk.Frame(calculator_frame)
     third_row.grid(column=0, row=2, padx=4)
-    ttk.Button(third_row, text="7", command=lambda : self.press_number("7"), width="5").grid(column=0, row=0)
-    ttk.Button(third_row, text="8", command=lambda : self.press_number("8"), width="5").grid(column=1, row=0)
-    ttk.Button(third_row, text="9", command=lambda : self.press_number("9"), width="5").grid(column=2, row=0)
-    ttk.Button(third_row, text="x", command=lambda : self.press_operator("x"), width="5").grid(column=3, row=0)
+    ttk.Button(third_row, text="7", command=lambda : self.update_display("7"), width="5").grid(column=0, row=0)
+    ttk.Button(third_row, text="8", command=lambda : self.update_display("8"), width="5").grid(column=1, row=0)
+    ttk.Button(third_row, text="9", command=lambda : self.update_display("9"), width="5").grid(column=2, row=0)
+    ttk.Button(third_row, text="x", command=lambda : self.update_display("x"), width="5").grid(column=3, row=0)
     
     fourth_row = ttk.Frame(calculator_frame)
     fourth_row.grid(column=0, row=1, padx=4)
-    ttk.Button(fourth_row, text="C", command=lambda : self.clear(1), width="5").grid(column=0, row=0)
-    ttk.Button(fourth_row, text="CE", command=lambda : self.clear(0), width="5").grid(column=1, row=0)
-    ttk.Button(fourth_row, text="÷", command=lambda : self.press_operator("÷"), width="5").grid(column=2, row=0)
-    ttk.Button(fourth_row, text="⌫ ", command=self.backspace, width="5").grid(column=3, row=0)
+    ttk.Button(fourth_row, text="C", command=self.clear_button, width="5").grid(column=0, row=0)
+    ttk.Button(fourth_row, text="÷", command=lambda : self.update_display("÷"), width="5").grid(column=1, row=0)
+    ttk.Button(fourth_row, text="⌫", command=self.backspace_button, width="5").grid(column=2, row=0)
     
     fifth_row = ttk.Frame(calculator_frame)
     fifth_row.grid(column=0, row=0, padx=4)
-    ttk.Button(fifth_row, text="(", command=lambda : self.press_operator("("), width="5").grid(column=0, row=0)
-    ttk.Button(fifth_row, text=")", command=lambda : self.press_operator(")"), width="5").grid(column=1, row=0)
-    ttk.Button(fifth_row, text="π", command=lambda : self.press_operator("π"), width="5").grid(column=2, row=0)
-    ttk.Button(fifth_row, text="^", command=lambda : self.press_operator("^"), width="5").grid(column=3, row=0)
+    ttk.Button(fifth_row, text="(", command=lambda : self.update_display("("), width="5").grid(column=0, row=0)
+    ttk.Button(fifth_row, text=")", command=lambda : self.update_display(")"), width="5").grid(column=1, row=0)
+    ttk.Button(fifth_row, text="π", command=lambda : self.update_display("π"), width="5").grid(column=2, row=0)
+    ttk.Button(fifth_row, text="^", command=lambda : self.update_display("^"), width="5").grid(column=3, row=0)
   
   # FUNCTION 
   
-  """
-    Press should have only have one
-    method that updates the equation
-    Adding to the string list, adding to
-    the numbers and operations to be executed
-  """
-  def press_number(self, number: str, event=None) -> None:
-    self._update_working_equation(number)
+  # This is a functional method
+  def press_button(self, btnPress: str) -> None:
+    self.equation.append(btnPress)
   
-  def press_operator(self, operator: str, event=None) -> None:
-    self._update_whole_equation(operator)
+  # new clear functions
+  def clear_button(self, event=None) -> None:
+    self.equation_display.set("")
+    self.equation.clear()
   
-  """
-    backspace should do two things
-    1. update currently updated display of equation
-    2. remove the operator and/or number
-  """
+  # update display new function
+  def update_display(self, pressed_button: str, event=None) -> None:
+    new_equation = self.equation_display.get() + pressed_button + " "
+    self.equation_display.set(new_equation)
+    self.press_button(pressed_button)
   
-  def backspace(self, event=None) -> None:
-    current_equation = self.working_equation.get()
-    current_whole = self.whole_equation.get()
+  # new backspace function
+  def backspace_button(self, event=None) -> None:
+    current_equation = self.equation_display.get()
+    if current_equation:
+      new_equation = current_equation[:-2]
+      self.equation_display.set(new_equation)
     
-    if current_equation != "" and current_equation != None:
-      self.working_equation.set(current_equation[:-1])
-    
-    elif current_whole != "" and current_whole != None:
-      self.whole_equation.set(current_whole[:-2])
-    
-    else:
-      return
+    if len(self.equation) != 0:
+      self.equation.pop()
   
   """
-    Equal method should then do the calculation
-    ,send the list, receive it back, and 
-    update the dispaly
+    Equal method should then do the calculation,
+    send the list, receive it back, and update 
+    the display.
   """
+  
   def equal(self, event=None) -> None: 
     final_equation = self._update_final_equation()
     resultant = Resultant(self.ops, final_equation).execute()
     self._output_result(resultant)
   
-  """
-  C: clears everything in the equation
-  CE: clears the numbers/operators in deciding
-  """
-  
-  def clear(self, clear_type: int, event=None) -> None:
-    if clear_type:
-      self.working_equation.set("")
-    else:
-      self.working_equation.set("")
-      self.whole_equation.set("")
-    
-    ClearCommand(self.ops, clear_type).execute()
-  
-  """
-    Update the below accordingly
-  """
   # HELPER
   
   def _defualt_grid_column_weights(self, frame:tk.Misc, columns:int) -> None:
@@ -196,11 +182,10 @@ class MainWindow():
   # UI SERVICES
   
   def bind_services(self) -> None:
-    for i in range(10):
-      self.root.bind(f"<KeyPress-{i}>", lambda e, num = i : self.press_number(f"{num}"))
-    
-    self.root.bind("<BackSpace>", self.backspace)
+    self.root.bind("<BackSpace>", lambda e: self.backspace_button(e))
     self.root.bind("<Return>", self.equal)
+    for i in range(10):
+      self.root.bind(f"<KeyPress-{i}>", lambda e, num = i : self.update_display(f"{num}", e))
   
   def build_ui(self) -> None:
     self.display_screen()
