@@ -57,6 +57,7 @@ class MainWindow():
     
     negative_row = ttk.Frame(calculator_frame)
     negative_row.grid(column=0, row=5, padx=4)
+    ttk.Button(negative_row, text="+/-", command=lambda : self.update_display("neg"), width="5").grid(column=0, row=0)
     ttk.Button(negative_row, text="0", command=lambda : self.update_display("0"), width="5").grid(column=1, row=0)
     ttk.Button(negative_row, text=",", command=lambda : self.update_display(","), width="5").grid(column=2, row=0)
     ttk.Button(negative_row, text="=", command=self.equal, width="5").grid(column=3, row=0)
@@ -84,16 +85,25 @@ class MainWindow():
     
     fourth_row = ttk.Frame(calculator_frame)
     fourth_row.grid(column=0, row=1, padx=4)
-    ttk.Button(fourth_row, text="C", command=self.clear_button, width="5").grid(column=0, row=0)
-    ttk.Button(fourth_row, text="÷", command=lambda : self.update_display("÷"), width="5").grid(column=1, row=0)
-    ttk.Button(fourth_row, text="⌫", command=self.backspace_button, width="5").grid(column=2, row=0)
+    ttk.Button(fourth_row, text="(", command=lambda : self.update_display("("), width="5").grid(column=0, row=0)
+    ttk.Button(fourth_row, text=")", command=lambda : self.update_display(")"), width="5").grid(column=1, row=0)
+    ttk.Button(fourth_row, text="^", command=lambda : self.update_display("^"), width="5").grid(column=2, row=0)
+    ttk.Button(fourth_row, text="÷", command=lambda : self.update_display("÷"), width="5").grid(column=3, row=0)
     
     fifth_row = ttk.Frame(calculator_frame)
     fifth_row.grid(column=0, row=0, padx=4)
-    ttk.Button(fifth_row, text="(", command=lambda : self.update_display("("), width="5").grid(column=0, row=0)
-    ttk.Button(fifth_row, text=")", command=lambda : self.update_display(")"), width="5").grid(column=1, row=0)
-    ttk.Button(fifth_row, text="π", command=lambda : self.update_display("π"), width="5").grid(column=2, row=0)
-    ttk.Button(fifth_row, text="^", command=lambda : self.update_display("^"), width="5").grid(column=3, row=0)
+    ttk.Button(fifth_row, text="1/x", command=lambda : self.update_display("f"), width="5").grid(column=0, row=0)
+    ttk.Button(fifth_row, text="√", command=lambda : self.update_display("√"), width="5").grid(column=1, row=0)
+    ttk.Button(fifth_row, text="C", command=self.clear_button, width="5").grid(column=2, row=0)
+    ttk.Button(fifth_row, text="⌫", command=self.backspace_button, width="5").grid(column=3, row=0)
+  
+  def _defualt_grid_column_weights(self, frame:tk.Misc, columns:int) -> None:
+    for column in range(columns):
+      frame.grid_columnconfigure(column, weight=1)
+  
+  def _defualt_grid_row_weights(self, frame:tk.Misc, rows:int) -> None:
+    for row in range(rows):
+      frame.grid_rowconfigure(row, weight=1)
   
   # FUNCTION 
   
@@ -135,14 +145,6 @@ class MainWindow():
   
   # HELPER
   
-  def _defualt_grid_column_weights(self, frame:tk.Misc, columns:int) -> None:
-    for column in range(columns):
-      frame.grid_columnconfigure(column, weight=1)
-  
-  def _defualt_grid_row_weights(self, frame:tk.Misc, rows:int) -> None:
-    for row in range(rows):
-      frame.grid_rowconfigure(row, weight=1)
-  
   def _update_working_equation(self, execution:str, event=None) -> None:
     current_equation = self.working_equation.get().strip()
     current_equation += execution
@@ -176,14 +178,16 @@ class MainWindow():
     return final_equation
   
   def _output_result(self, result: float) -> None:
-    self.clear(0)
+    self.clear_button()
     self.working_equation.set(result)
   
   # UI SERVICES
   
   def bind_services(self) -> None:
     self.root.bind("<BackSpace>", lambda e: self.backspace_button(e))
-    self.root.bind("<Return>", self.equal)
+    self.root.bind("<Return>", lambda e: self.equal(e))
+    self.root.bind("<parenleft>", lambda e : self.update_display("(", e))
+    self.root.bind("<parenright>", lambda e : self.update_display(")", e))
     for i in range(10):
       self.root.bind(f"<KeyPress-{i}>", lambda e, num = i : self.update_display(f"{num}", e))
   
