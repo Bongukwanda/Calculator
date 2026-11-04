@@ -25,4 +25,4 @@ class Resultant(CommandBase):
     self.equation = equation
   
   def execute(self):
-    return self.receiever.calculate_answer(self.equation)
+    return self.receiever.calculate_result(self.equation)

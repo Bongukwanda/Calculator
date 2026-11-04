@@ -12,8 +12,6 @@ class Operations:
     "^" : "exponentiate"
   }
   
-  NUMBERS = {"1","2","3","4","5","6","7","8","9","0"}
-  
   def __init__(self):
     self.operation = []
     self.equation = []
@@ -28,6 +26,14 @@ class Operations:
     else:
       self.operation.clear()
       self.equation.clear()
+  
+  def calculate_result(self, equation:list):
+    result = 0.0
+    for item in equation:
+      if item.isdigit():
+        result += float(item)
+    
+    return result
   
   def calculate_answer(self, equation: str) -> float | int | str:
     op_equation = self._get_operational_equation(equation)

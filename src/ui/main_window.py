@@ -23,6 +23,7 @@ class MainWindow():
     
     self.working_equation = tk.StringVar()
     self.whole_equation = tk.StringVar()
+    
     self.root.grid_columnconfigure(0, weight=1)
     self.root.grid_rowconfigure(0, weight=1)
     self.root.grid_rowconfigure(1, weight=1)
@@ -38,11 +39,12 @@ class MainWindow():
   def display_screen(self) -> None:
     screen_frame = ttk.Frame(self.root, border=2, borderwidth=5, relief="solid")
     screen_frame.grid(column=0, row=0, padx=8, pady=8, sticky="nsew")
-    whole_equation = ttk.Label(screen_frame, anchor="se", background="white", textvariable=self.equation_display,)
+    screen_frame.pack_propagate(False)
+    whole_equation = ttk.Label(screen_frame, anchor="nw", background="white", textvariable=self.equation_display,)
     whole_equation.pack(fill="both", expand=True)
     
     def wrap_display(event):
-      wrap_width = event.width - 20
+      wrap_width = event.width - 10
       if wrap_width > 0:
         whole_equation.config(wraplength=wrap_width)
     
@@ -107,22 +109,26 @@ class MainWindow():
   
   # FUNCTION 
   
-  # This is a functional method
+  # Update the display and formula for the button pressed
   def press_button(self, btnPress: str) -> None:
     self.equation.append(btnPress)
   
-  # new clear functions
+  # Clears the equation and display
   def clear_button(self, event=None) -> None:
     self.equation_display.set("")
     self.equation.clear()
   
-  # update display new function
-  def update_display(self, pressed_button: str, event=None) -> None:
-    new_equation = self.equation_display.get() + pressed_button + " "
-    self.equation_display.set(new_equation)
-    self.press_button(pressed_button)
+  # This writes to the display of the calculator
+  def update_display(self, pressed_button: str, resultant=False, event=None) -> None:
+    if resultant:
+      self.equation_display.set(resultant)
+      self.equation.clear()
+    else:
+      new_equation = self.equation_display.get() + pressed_button + " "
+      self.equation_display.set(new_equation)
+      self.press_button(pressed_button)
   
-  # new backspace function
+  # removes from the last input and equation
   def backspace_button(self, event=None) -> None:
     current_equation = self.equation_display.get()
     if current_equation:
@@ -133,15 +139,11 @@ class MainWindow():
       self.equation.pop()
   
   """
-    Equal method should then do the calculation,
-    send the list, receive it back, and update 
-    the display.
+    Return the resultant equation
   """
-  
   def equal(self, event=None) -> None: 
-    final_equation = self._update_final_equation()
-    resultant = Resultant(self.ops, final_equation).execute()
-    self._output_result(resultant)
+    resultant = Resultant(self.ops, self.equation).execute()
+    self.update_display(resultant, resultant=True, event=event)
   
   # HELPER
   
@@ -188,6 +190,12 @@ class MainWindow():
     self.root.bind("<Return>", lambda e: self.equal(e))
     self.root.bind("<parenleft>", lambda e : self.update_display("(", e))
     self.root.bind("<parenright>", lambda e : self.update_display(")", e))
+    
+    self.root.bind("<asterisk>", lambda e : self.update_display("x", e))
+    self.root.bind("<KP_Multiply>", lambda e : self.update_display("x", e))
+    self.root.bind("<slash>", lambda e : self.update_display("÷", e))
+    self.root.bind("<KP_Divide>", lambda e : self.update_display("÷", e))
+    
     for i in range(10):
       self.root.bind(f"<KeyPress-{i}>", lambda e, num = i : self.update_display(f"{num}", e))
   
