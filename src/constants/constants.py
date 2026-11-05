@@ -3,5 +3,13 @@ FUNCTIONS = {
   "-" : "subtract",
   "x" : "multiply", 
   "÷" : "divide", 
-  "^" : "exponentiate"
+  "^" : "exponentiate",
+  "1/x" : "fraction",
+  "√" : "sqrt"
+}
+
+NUM_STRUCTURE = {
+  "+/-" : "negate",
+  "(" : "paren left",
+  ")" : "paren right"
 }

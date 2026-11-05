@@ -1,5 +1,4 @@
-from __future__ import annotations
-from constants.constants import FUNCTIONS
+from constants.constants import FUNCTIONS, NUM_STRUCTURE
 
 class Operations:
   
