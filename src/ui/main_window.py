@@ -1,10 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-
-from commands.commands import (
-  ClearCommand,
-  Resultant
-)
+from commands.commands import Resultant
 from services.operations import Operations
 
 class MainWindow():
@@ -17,12 +13,8 @@ class MainWindow():
     
     # ---- UI/UX ----
     
-    # new equation list
     self.equation: list = []
     self.equation_display = tk.StringVar()
-    
-    self.working_equation = tk.StringVar()
-    self.whole_equation = tk.StringVar()
     
     self.root.grid_columnconfigure(0, weight=1)
     self.root.grid_rowconfigure(0, weight=1)
@@ -109,26 +101,22 @@ class MainWindow():
   
   # FUNCTION 
   
-  # Update the display and formula for the button pressed
   def press_button(self, btnPress: str) -> None:
     self.equation.append(btnPress)
   
-  # Clears the equation and display
   def clear_button(self, event=None) -> None:
     self.equation_display.set("")
     self.equation.clear()
   
-  # This writes to the display of the calculator
   def update_display(self, pressed_button: str, resultant=False, event=None) -> None:
     if resultant:
-      self.equation_display.set(resultant)
+      self.equation_display.set(pressed_button)
       self.equation.clear()
     else:
       new_equation = self.equation_display.get() + pressed_button + " "
       self.equation_display.set(new_equation)
       self.press_button(pressed_button)
   
-  # removes from the last input and equation
   def backspace_button(self, event=None) -> None:
     current_equation = self.equation_display.get()
     if current_equation:
@@ -138,50 +126,9 @@ class MainWindow():
     if len(self.equation) != 0:
       self.equation.pop()
   
-  """
-    Return the resultant equation
-  """
   def equal(self, event=None) -> None: 
-    resultant = Resultant(self.ops, self.equation).execute()
-    self.update_display(resultant, resultant=True, event=event)
-  
-  # HELPER
-  
-  def _update_working_equation(self, execution:str, event=None) -> None:
-    current_equation = self.working_equation.get().strip()
-    current_equation += execution
-    self.working_equation.set(current_equation)
-  
-  def _update_whole_equation(self, execution:str) -> None:
-    working_equation = self.working_equation.get().strip()
-    whole_equation = self.whole_equation.get()
-    current_equation = ""
-    execution = " " + execution
-    
-    if not whole_equation:
-      current_equation = working_equation + execution
-    elif working_equation:
-      current_equation = whole_equation + working_equation + execution
-    else:
-      current_equation = whole_equation + execution
-    
-    self.whole_equation.set(current_equation)
-    self.working_equation.set("")
-  
-  def _update_final_equation(self) -> str:
-    whole = self.whole_equation.get()
-    current = self.working_equation.get()
-    if not current:
-      return whole
-    
-    final_equation = whole + current
-    self._update_whole_equation(final_equation)
-    
-    return final_equation
-  
-  def _output_result(self, result: float) -> None:
-    self.clear_button()
-    self.working_equation.set(result)
+    result = Resultant(self.ops, self.equation).execute()
+    self.update_display(result, resultant=True, event=event)
   
   # UI SERVICES
   
