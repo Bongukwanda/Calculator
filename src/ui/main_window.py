@@ -108,6 +108,9 @@ class MainWindow():
     self.equation_display.set("")
     self.equation.clear()
   
+  def _input_number(self, event):
+    pass
+  
   def update_display(self, pressed_button: str, resultant=False, event=None) -> None:
     if resultant:
       self.equation_display.set(pressed_button)
@@ -137,6 +140,7 @@ class MainWindow():
     self.root.bind("<Return>", lambda e: self.equal(e))
     self.root.bind("<parenleft>", lambda e : self.update_display("(", e))
     self.root.bind("<parenright>", lambda e : self.update_display(")", e))
+    self.root.bind("<Period>", lambda e : self.update_display(".", e))
     
     self.root.bind("<asterisk>", lambda e : self.update_display("x", e))
     self.root.bind("<KP_Multiply>", lambda e : self.update_display("x", e))
