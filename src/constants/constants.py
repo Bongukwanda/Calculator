@@ -1,15 +1,18 @@
+import math
+import operator
+
 FUNCTIONS = {
-  "+" : "add", 
-  "-" : "subtract",
-  "x" : "multiply", 
-  "÷" : "divide", 
-  "^" : "exponentiate",
-  "1/x" : "fraction",
-  "√" : "sqrt"
+  "+" : operator.add, 
+  "-" : operator.sub,
+  "x" : operator.mul, 
+  "÷" : operator.truediv, 
+  "^" : operator.pow,
+  "%" : operator.mod,
+  "√" : lambda a: math.sqrt(a)
 }
 
 NUM_STRUCTURE = {
-  "+/-" : "negate",
+  "+/-" : operator.inv,
   "(" : "paren left",
   ")" : "paren right"
 }

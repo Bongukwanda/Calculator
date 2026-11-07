@@ -53,7 +53,7 @@ class MainWindow():
     negative_row.grid(column=0, row=5, padx=4)
     ttk.Button(negative_row, text="+/-", command=lambda : self.update_display("neg"), width="5").grid(column=0, row=0)
     ttk.Button(negative_row, text="0", command=lambda : self.update_display("0"), width="5").grid(column=1, row=0)
-    ttk.Button(negative_row, text=",", command=lambda : self.update_display(","), width="5").grid(column=2, row=0)
+    ttk.Button(negative_row, text=",", command=lambda : self.update_display("."), width="5").grid(column=2, row=0)
     ttk.Button(negative_row, text="=", command=self.equal, width="5").grid(column=3, row=0)
     
     first_row = ttk.Frame(calculator_frame)
@@ -86,7 +86,7 @@ class MainWindow():
     
     fifth_row = ttk.Frame(calculator_frame)
     fifth_row.grid(column=0, row=0, padx=4)
-    ttk.Button(fifth_row, text="1/x", command=lambda : self.update_display("f"), width="5").grid(column=0, row=0)
+    ttk.Button(fifth_row, text="%", command=lambda : self.update_display("%"), width="5").grid(column=0, row=0)
     ttk.Button(fifth_row, text="√", command=lambda : self.update_display("√"), width="5").grid(column=1, row=0)
     ttk.Button(fifth_row, text="C", command=self.clear_button, width="5").grid(column=2, row=0)
     ttk.Button(fifth_row, text="⌫", command=self.backspace_button, width="5").grid(column=3, row=0)

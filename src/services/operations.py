@@ -3,15 +3,28 @@ from constants.constants import FUNCTIONS, NUM_STRUCTURE
 class Operations:
   
   def calculate_result(self, equation:list):
-    result = 0.0
+    result = []
+    opperation = ""
     for item in equation:
       if item.isnumeric():
-        result += float(item)
+        result.append(float(item))
+      elif item in FUNCTIONS:
+        opperation = item
+      else:
+        pass
+      
+      if opperation and len(result) > 1:
+        latestCalculation = FUNCTIONS[opperation](result[0], result[1])
+        result.clear()
+        opperation = ""
+        result.append(latestCalculation)
     
     return result
   
   # helpers
   
   def _organize_list(self, raw_list:list) -> list:
-    pass
+    for index, item in enumerate(raw_list):
+      if item == ".":
+        pass
   
