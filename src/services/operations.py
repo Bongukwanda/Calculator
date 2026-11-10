@@ -3,6 +3,7 @@ from constants.constants import FUNCTIONS, NUM_STRUCTURE
 class Operations:
   
   def calculate_result(self, equation:list):
+    print("equation = ",equation)
     result = []
     opperation = ""
     for item in equation:
