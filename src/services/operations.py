@@ -5,6 +5,7 @@ class Operations:
   def calculate_result(self, equation:list):
     print("equation = ",equation)
     result = []
+    answer = 0
     opperation = ""
     for item in equation:
       if item.isnumeric():
@@ -18,7 +19,7 @@ class Operations:
         latestCalculation = FUNCTIONS[opperation](result[0], result[1])
         result.clear()
         opperation = ""
-        result.append(latestCalculation)
+        return latestCalculation
     
     return result
   

@@ -13,6 +13,8 @@ class MainWindow():
     
     # ---- UI/UX ----
     
+    self.number_input: str = ""
+    self.output_returned: bool = False
     self.equation: list = []
     self.equation_display = tk.StringVar()
     
@@ -102,14 +104,22 @@ class MainWindow():
   # FUNCTION 
   
   def input_number(self, input: str, event=None) -> None:
+    if self.output_returned:
+      self.equation_display.set("")
+      self.output_returned = False
+    self.number_input += input
     new_equation = self.equation_display.get() + input
     self.equation_display.set(new_equation)
   
   def input_operator(self, operator: str, event=None) -> None:
-    number = self.equation_display.get()
-    self._update_equation_list(True, number, operator)
-    new_equation = number + " " + operator + " "
+    if self.output_returned:
+      self.number_input = self.equation_display.get()
+      self.output_returned = False
+    self._update_equation_list(True, self.number_input, operator)
+    print("updated list: ", self.equation)
+    new_equation = self.number_input + " " + operator + " "
     self.equation_display.set(new_equation)
+    self.number_input = ""
   
   def input_special_op(self, operator: str, event=None) -> None:
     pass
@@ -117,8 +127,7 @@ class MainWindow():
   def output_answer(self, event=None) -> None:
     self._get_last_input()
     result = Resultant(self.ops, self.equation).execute()
-    self.equation_display.set(result)
-    self.equation.clear()
+    self._update_result_output(result)
   
   def backspace_input(self, event=None) -> None:
     current_equation = self.equation_display.get()
@@ -136,11 +145,8 @@ class MainWindow():
     self.equation.clear()
   
   def _get_last_input(self) -> None:
-    last_operator = self.equation[-1]
-    for index, char in enumerate(self.equation_display.get()[::-1]):
-      if char == last_operator:
-        last_input = self.equation_display.get()[index+1:].strip()
-        self._update_equation_list(True, last_input)
+    self._update_equation_list(True, self.number_input)
+    self.number_input = ""
   
   def _update_equation_list(self, add_item=True, *args) -> None:
     if add_item:
@@ -149,6 +155,11 @@ class MainWindow():
     else:
       if len(self.equation) != 0:
         self.equation.pop()
+  
+  def _update_result_output(self, result) -> None:
+    self.equation_display.set(result)
+    self.equation.clear()
+    self.output_returned = True
   
   # UI SERVICES
   
@@ -162,8 +173,8 @@ class MainWindow():
     
     self.root.bind("<Shift-slash>", lambda e : self.input_operator("÷", e))
     self.root.bind("<Shift-asterisk>", lambda e : self.input_operator("x", e))
-    self.root.bind("<plus>", lambda e : self.input_operator("+", e))
-    self.root.bind("<minus>", lambda e : self.input_operator("-", e))
+    self.root.bind("<Shift-plus>", lambda e : self.input_operator("+", e))
+    self.root.bind("<Shift-minus>", lambda e : self.input_operator("-", e))
     self.root.bind("<Shift-percent>", lambda e : self.input_operator("%", e))
     self.root.bind("<asciicircum>", lambda e : self.input_operator("^", e))
     
