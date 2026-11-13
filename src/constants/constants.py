@@ -1,6 +1,14 @@
 import math
 import operator
 
+BODMAS = {
+  "b": 0,
+  "÷": 1,
+  "x": 2,
+  "+": 3,
+  "-": 4
+}
+
 FUNCTIONS = {
   "+" : operator.add, 
   "-" : operator.sub,
@@ -13,6 +21,6 @@ FUNCTIONS = {
 
 NUM_STRUCTURE = {
   "+/-" : operator.inv,
-  "(" : "paren left",
-  ")" : "paren right"
+  "(" : None,
+  ")" : None
 }

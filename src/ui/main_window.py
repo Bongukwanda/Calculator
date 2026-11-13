@@ -81,8 +81,8 @@ class MainWindow():
     
     fourth_row = ttk.Frame(calculator_frame)
     fourth_row.grid(column=0, row=1, padx=4)
-    ttk.Button(fourth_row, text="(", command=lambda : self.input_operator("("), width="5").grid(column=0, row=0)
-    ttk.Button(fourth_row, text=")", command=lambda : self.input_operator(")"), width="5").grid(column=1, row=0)
+    ttk.Button(fourth_row, text="(", command=lambda : self.input_parentheses("("), width="5").grid(column=0, row=0)
+    ttk.Button(fourth_row, text=")", command=lambda : self.input_parentheses(")"), width="5").grid(column=1, row=0)
     ttk.Button(fourth_row, text="^", command=lambda : self.input_operator("^"), width="5").grid(column=2, row=0)
     ttk.Button(fourth_row, text="÷", command=lambda : self.input_operator("÷"), width="5").grid(column=3, row=0)
     
@@ -115,14 +115,18 @@ class MainWindow():
     if self.output_returned:
       self.number_input = self.equation_display.get()
       self.output_returned = False
-    self._update_equation_list(True, self.number_input, operator)
-    print("updated list: ", self.equation)
-    new_equation = self.number_input + " " + operator + " "
+    converted_number = float(self.number_input)
+    self._update_equation_list(True, converted_number, operator)
+    new_equation = self.equation_display.get() + " " + operator + " "
     self.equation_display.set(new_equation)
     self.number_input = ""
   
-  def input_special_op(self, operator: str, event=None) -> None:
-    pass
+  def input_parentheses(self, paren: str, event=None) -> None:
+    if self.output_returned:
+      self.input_operator("x", event)
+    self._update_equation_list(True, paren)
+    new_equation = self.equation_display.get() + paren
+    self.equation_display.set(new_equation)
   
   def output_answer(self, event=None) -> None:
     self._get_last_input()
@@ -145,7 +149,8 @@ class MainWindow():
     self.equation.clear()
   
   def _get_last_input(self) -> None:
-    self._update_equation_list(True, self.number_input)
+    converted_number= float(self.number_input)
+    self._update_equation_list(True, converted_number)
     self.number_input = ""
   
   def _update_equation_list(self, add_item=True, *args) -> None:
