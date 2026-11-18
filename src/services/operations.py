@@ -38,47 +38,10 @@ class Operations:
     return operators
   
   def _apply_bodmas(self):
-    shunt_equation = []
-    moved_numbers = []
-    
     shunt_equation_2 = []
     moved_numbers_2 = []
-    
-    myeq = self.equation
     myeq_2 = self.equation
     bodmas_list = self._find_bodmas()
-    
-    # for op in bodmas_list:
-    #   if myeq[op[0]+1] == myeq[-1]:
-    #     if myeq[op[0]+1] not in moved_numbers:
-    #       shunt_equation.append(myeq[op[0]+1])
-    #       moved_numbers.append(myeq[op[0]+1])
-    #     if myeq[op[0]] not in moved_numbers:
-    #       shunt_equation.append(myeq[op[0]])
-    #       moved_numbers.append(myeq[op[0]])
-    #     if myeq[op[0]-1] not in moved_numbers:
-    #       shunt_equation.append(myeq[op[0]-1])
-    #       moved_numbers.append(myeq[op[0]-1])
-    #   elif myeq[op[0]-1] == myeq[0]:
-    #     if myeq[op[0]-1] not in moved_numbers:
-    #       shunt_equation.append(myeq[op[0]-1])
-    #       moved_numbers.append(myeq[op[0]-1])
-    #     if myeq[op[0]] not in moved_numbers:
-    #       shunt_equation.append(myeq[op[0]])
-    #       moved_numbers.append(myeq[op[0]])
-    #     if myeq[op[0]+1] not in moved_numbers:
-    #       shunt_equation.append(myeq[op[0]+1])
-    #       moved_numbers.append(myeq[op[0]+1])
-    #   else:
-    #     if myeq[op[0]-1] not in moved_numbers:
-    #       shunt_equation.append(myeq[op[0]-1])
-    #       moved_numbers.append(myeq[op[0]-1])
-    #     if myeq[op[0]] not in moved_numbers:
-    #       shunt_equation.append(myeq[op[0]])
-    #       moved_numbers.append(myeq[op[0]])
-    #     if myeq[op[0]+1] not in moved_numbers:
-    #       shunt_equation.append(myeq[op[0]+1])
-    #       moved_numbers.append(myeq[op[0]+1])
     
     for ops in bodmas_list:
       eq_item = ops[0]

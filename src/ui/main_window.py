@@ -115,7 +115,12 @@ class MainWindow():
     if self.output_returned:
       self.number_input = self.equation_display.get()
       self.output_returned = False
-    converted_number = float(self.number_input)
+    
+    if "." in self.number_input:
+      converted_number = float(self.number_input)
+    else:
+      converted_number = int(self.number_input)
+    
     self._update_equation_list(True, converted_number, operator)
     new_equation = self.equation_display.get() + " " + operator + " "
     self.equation_display.set(new_equation)
@@ -134,22 +139,20 @@ class MainWindow():
     self._update_result_output(result)
   
   def backspace_input(self, event=None) -> None:
-    current_equation = self.equation_display.get()
-    if current_equation:
-      if current_equation[-1] != " ":
-        new_equation = current_equation[:-1]
-        self.equation_display.set(new_equation)
-        self._update_equation_list(add_item=False)
-      else:
-        new_equation = current_equation[:-1]
-        self.equation_display.set(new_equation)
+    current_equation = self.equation_display.get().rstrip()
+    updated_equation = current_equation[:-1]
+    self.equation_display.set(updated_equation)
   
   def clear_button(self, event=None) -> None:
     self.equation_display.set("")
     self.equation.clear()
   
   def _get_last_input(self) -> None:
-    converted_number= float(self.number_input)
+    if "." in self.number_input:
+      converted_number = float(self.number_input)
+    else:
+      converted_number = int(self.number_input)
+    
     self._update_equation_list(True, converted_number)
     self.number_input = ""
   

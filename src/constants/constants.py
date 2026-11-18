@@ -2,7 +2,8 @@ import math
 import operator
 
 BODMAS = {
-  "b": 0,
+  "(": 0,
+  ")": 0,
   "÷": 1,
   "x": 2,
   "+": 3,
@@ -20,7 +21,5 @@ FUNCTIONS = {
 }
 
 NUM_STRUCTURE = {
-  "+/-" : operator.inv,
-  "(" : None,
-  ")" : None
+  "+/-" : operator.inv
 }
