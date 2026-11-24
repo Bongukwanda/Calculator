@@ -8,7 +8,7 @@ class MainWindow():
   def __init__(self, root: tk.Tk | None = None):
     
     self.root = root
-    self.root.geometry("200x280")
+    self.root.minsize(180, 280)
     self.root.title("Calculator")
     
     # ---- UI/UX ----
@@ -32,9 +32,9 @@ class MainWindow():
   
   def display_screen(self) -> None:
     screen_frame = ttk.Frame(self.root, border=2, borderwidth=5, relief="solid")
-    screen_frame.grid(column=0, row=0, padx=8, pady=8, sticky="nsew")
+    screen_frame.grid(column=0, row=0, padx=8, pady=(8,0), sticky="nsew")
     screen_frame.pack_propagate(False)
-    whole_equation = ttk.Label(screen_frame, anchor="nw", background="white", textvariable=self.equation_display,)
+    whole_equation = ttk.Label(screen_frame, anchor="nw", background="white", textvariable=self.equation_display)
     whole_equation.pack(fill="both", expand=True)
     
     def wrap_display(event):
@@ -46,48 +46,48 @@ class MainWindow():
   
   def build_buttons(self) -> None:
     calculator_frame = ttk.Frame(self.root)
-    calculator_frame.grid(column=0, row=1, sticky="nsew")
+    calculator_frame.grid(column=0, row=1, pady=(0,8), sticky="nsew")
     
     self._defualt_grid_column_weights(calculator_frame, 1)
     self._defualt_grid_row_weights(calculator_frame, 6)
     
     negative_row = ttk.Frame(calculator_frame)
-    negative_row.grid(column=0, row=5, padx=4)
+    negative_row.grid(column=0, row=5)
     ttk.Button(negative_row, text="+/-", command=lambda : self.input_operator("neg"), width="5").grid(column=0, row=0)
     ttk.Button(negative_row, text="0", command=lambda : self.input_number("0"), width="5").grid(column=1, row=0)
     ttk.Button(negative_row, text=".", command=lambda : self.input_number("."), width="5").grid(column=2, row=0)
     ttk.Button(negative_row, text="=", command=self.output_answer, width="5").grid(column=3, row=0)
     
     first_row = ttk.Frame(calculator_frame)
-    first_row.grid(column=0, row=4, padx=4)
+    first_row.grid(column=0, row=4)
     ttk.Button(first_row, text="1", command=lambda : self.input_number("1"), width="5").grid(column=0, row=0)
     ttk.Button(first_row, text="2", command=lambda : self.input_number("2"), width="5").grid(column=1, row=0)
     ttk.Button(first_row, text="3", command=lambda : self.input_number("3"), width="5").grid(column=2, row=0)
     ttk.Button(first_row, text="+", command=lambda : self.input_operator("+"), width="5").grid(column=3, row=0)
     
     second_row = ttk.Frame(calculator_frame)
-    second_row.grid(column=0, row=3, padx=4)
+    second_row.grid(column=0, row=3)
     ttk.Button(second_row, text="4", command=lambda : self.input_number("4"), width="5").grid(column=0, row=0)
     ttk.Button(second_row, text="5", command=lambda : self.input_number("5"), width="5").grid(column=1, row=0)
     ttk.Button(second_row, text="6", command=lambda : self.input_number("6"), width="5").grid(column=2, row=0)
     ttk.Button(second_row, text="-", command=lambda : self.input_operator("-"), width="5").grid(column=3, row=0)
     
     third_row = ttk.Frame(calculator_frame)
-    third_row.grid(column=0, row=2, padx=4)
+    third_row.grid(column=0, row=2)
     ttk.Button(third_row, text="7", command=lambda : self.input_number("7"), width="5").grid(column=0, row=0)
     ttk.Button(third_row, text="8", command=lambda : self.input_number("8"), width="5").grid(column=1, row=0)
     ttk.Button(third_row, text="9", command=lambda : self.input_number("9"), width="5").grid(column=2, row=0)
     ttk.Button(third_row, text="x", command=lambda : self.input_operator("x"), width="5").grid(column=3, row=0)
     
     fourth_row = ttk.Frame(calculator_frame)
-    fourth_row.grid(column=0, row=1, padx=4)
+    fourth_row.grid(column=0, row=1)
     ttk.Button(fourth_row, text="(", command=lambda : self.input_parentheses("("), width="5").grid(column=0, row=0)
     ttk.Button(fourth_row, text=")", command=lambda : self.input_parentheses(")"), width="5").grid(column=1, row=0)
     ttk.Button(fourth_row, text="^", command=lambda : self.input_operator("^"), width="5").grid(column=2, row=0)
     ttk.Button(fourth_row, text="÷", command=lambda : self.input_operator("÷"), width="5").grid(column=3, row=0)
     
     fifth_row = ttk.Frame(calculator_frame)
-    fifth_row.grid(column=0, row=0, padx=4)
+    fifth_row.grid(column=0, row=0)
     ttk.Button(fifth_row, text="%", command=lambda : self.input_operator("%"), width="5").grid(column=0, row=0)
     ttk.Button(fifth_row, text="√", command=lambda : self.input_operator("√"), width="5").grid(column=1, row=0)
     ttk.Button(fifth_row, text="C", command=self.clear_button, width="5").grid(column=2, row=0)
