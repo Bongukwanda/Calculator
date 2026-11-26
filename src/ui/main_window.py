@@ -53,7 +53,7 @@ class MainWindow():
     
     negative_row = ttk.Frame(calculator_frame)
     negative_row.grid(column=0, row=5)
-    ttk.Button(negative_row, text="+/-", command=lambda : self.input_operator("neg"), width="5").grid(column=0, row=0)
+    ttk.Button(negative_row, text="+/-", command=self.negate, width="5").grid(column=0, row=0)
     ttk.Button(negative_row, text="0", command=lambda : self.input_number("0"), width="5").grid(column=1, row=0)
     ttk.Button(negative_row, text=".", command=lambda : self.input_number("."), width="5").grid(column=2, row=0)
     ttk.Button(negative_row, text="=", command=self.output_answer, width="5").grid(column=3, row=0)
@@ -137,6 +137,21 @@ class MainWindow():
     self._get_last_input()
     result = Resultant(self.ops, self.equation).execute()
     self._update_result_output(result)
+  
+  # only works when number already printed
+  def negate(self, event=None) -> None:
+    if self.number_input:
+      cur_equation = self.equation_display.get()
+      cur_number = cur_equation.find(self.number_input)
+      
+      if "-" in self.number_input:
+        new_eqaution = cur_equation[:cur_number] + cur_equation[(cur_number + 1):]
+        self.number_input = self.number_input[1:]
+      else:
+        new_eqaution = cur_equation[:cur_number] + "-" + cur_equation[cur_number:]
+        self.number_input = "-" + self.number_input
+      
+      self.equation_display.set(new_eqaution)
   
   def backspace_input(self, event=None) -> None:
     current_equation = self.equation_display.get().rstrip()
