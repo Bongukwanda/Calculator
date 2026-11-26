@@ -108,8 +108,7 @@ class MainWindow():
       self.equation_display.set("")
       self.output_returned = False
     self.number_input += input
-    new_equation = self.equation_display.get() + input
-    self.equation_display.set(new_equation)
+    self._manage_displayed_equation(input)
   
   def input_operator(self, operator: str, event=None) -> None:
     if self.output_returned:
@@ -121,24 +120,21 @@ class MainWindow():
     else:
       converted_number = int(self.number_input)
     
-    self._update_equation_list(True, converted_number, operator)
-    new_equation = self.equation_display.get() + " " + operator + " "
-    self.equation_display.set(new_equation)
+    self._manage_equation_list(True, converted_number, operator)
+    self._manage_displayed_equation(" ", operator, " ")
     self.number_input = ""
   
   def input_parentheses(self, paren: str, event=None) -> None:
     if self.output_returned:
       self.input_operator("x", event)
-    self._update_equation_list(True, paren)
-    new_equation = self.equation_display.get() + paren
-    self.equation_display.set(new_equation)
+    self._manage_equation_list(True, paren)
+    self._manage_displayed_equation(paren)
   
   def output_answer(self, event=None) -> None:
     self._get_last_input()
     result = Resultant(self.ops, self.equation).execute()
-    self._update_result_output(result)
+    self._display_resultant(result)
   
-  # only works when number already printed
   def negate(self, event=None) -> None:
     if self.number_input:
       cur_equation = self.equation_display.get()
@@ -168,10 +164,10 @@ class MainWindow():
     else:
       converted_number = int(self.number_input)
     
-    self._update_equation_list(True, converted_number)
+    self._manage_equation_list(True, converted_number)
     self.number_input = ""
   
-  def _update_equation_list(self, add_item=True, *args) -> None:
+  def _manage_equation_list(self, add_item, *args) -> None:
     if add_item:
       for item in args:
         self.equation.append(item)
@@ -179,7 +175,13 @@ class MainWindow():
       if len(self.equation) != 0:
         self.equation.pop()
   
-  def _update_result_output(self, result) -> None:
+  def _manage_displayed_equation(self, *args) -> None:
+    new_equation = self.equation_display.get()
+    for value in args:
+      new_equation += value
+    self.equation_display.set(new_equation)
+  
+  def _display_resultant(self, result) -> None:
     self.equation_display.set(result)
     self.equation.clear()
     self.output_returned = True
