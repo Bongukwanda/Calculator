@@ -8,11 +8,13 @@ class MainWindow():
   def __init__(self, root: tk.Tk | None = None):
     
     self.root = root
-    self.root.geometry("200x280")
+    self.root.minsize(180, 280)
     self.root.title("Calculator")
     
     # ---- UI/UX ----
     
+    self.number_input: str = ""
+    self.output_returned: bool = False
     self.equation: list = []
     self.equation_display = tk.StringVar()
     
@@ -30,9 +32,9 @@ class MainWindow():
   
   def display_screen(self) -> None:
     screen_frame = ttk.Frame(self.root, border=2, borderwidth=5, relief="solid")
-    screen_frame.grid(column=0, row=0, padx=8, pady=8, sticky="nsew")
+    screen_frame.grid(column=0, row=0, padx=8, pady=(8,0), sticky="nsew")
     screen_frame.pack_propagate(False)
-    whole_equation = ttk.Label(screen_frame, anchor="nw", background="white", textvariable=self.equation_display,)
+    whole_equation = ttk.Label(screen_frame, anchor="nw", background="white", textvariable=self.equation_display)
     whole_equation.pack(fill="both", expand=True)
     
     def wrap_display(event):
@@ -44,52 +46,52 @@ class MainWindow():
   
   def build_buttons(self) -> None:
     calculator_frame = ttk.Frame(self.root)
-    calculator_frame.grid(column=0, row=1, sticky="nsew")
+    calculator_frame.grid(column=0, row=1, pady=(0,8), sticky="nsew")
     
     self._defualt_grid_column_weights(calculator_frame, 1)
     self._defualt_grid_row_weights(calculator_frame, 6)
     
     negative_row = ttk.Frame(calculator_frame)
-    negative_row.grid(column=0, row=5, padx=4)
-    ttk.Button(negative_row, text="+/-", command=lambda : self.update_display("neg"), width="5").grid(column=0, row=0)
-    ttk.Button(negative_row, text="0", command=lambda : self.update_display("0"), width="5").grid(column=1, row=0)
-    ttk.Button(negative_row, text=",", command=lambda : self.update_display(","), width="5").grid(column=2, row=0)
-    ttk.Button(negative_row, text="=", command=self.equal, width="5").grid(column=3, row=0)
+    negative_row.grid(column=0, row=5)
+    ttk.Button(negative_row, text="+/-", command=self.negate, width="5").grid(column=0, row=0)
+    ttk.Button(negative_row, text="0", command=lambda : self.input_number("0"), width="5").grid(column=1, row=0)
+    ttk.Button(negative_row, text=".", command=lambda : self.input_number("."), width="5").grid(column=2, row=0)
+    ttk.Button(negative_row, text="=", command=self.output_answer, width="5").grid(column=3, row=0)
     
     first_row = ttk.Frame(calculator_frame)
-    first_row.grid(column=0, row=4, padx=4)
-    ttk.Button(first_row, text="1", command=lambda : self.update_display("1"), width="5").grid(column=0, row=0)
-    ttk.Button(first_row, text="2", command=lambda : self.update_display("2"), width="5").grid(column=1, row=0)
-    ttk.Button(first_row, text="3", command=lambda : self.update_display("3"), width="5").grid(column=2, row=0)
-    ttk.Button(first_row, text="+", command=lambda : self.update_display("+"), width="5").grid(column=3, row=0)
+    first_row.grid(column=0, row=4)
+    ttk.Button(first_row, text="1", command=lambda : self.input_number("1"), width="5").grid(column=0, row=0)
+    ttk.Button(first_row, text="2", command=lambda : self.input_number("2"), width="5").grid(column=1, row=0)
+    ttk.Button(first_row, text="3", command=lambda : self.input_number("3"), width="5").grid(column=2, row=0)
+    ttk.Button(first_row, text="+", command=lambda : self.input_operator("+"), width="5").grid(column=3, row=0)
     
     second_row = ttk.Frame(calculator_frame)
-    second_row.grid(column=0, row=3, padx=4)
-    ttk.Button(second_row, text="4", command=lambda : self.update_display("4"), width="5").grid(column=0, row=0)
-    ttk.Button(second_row, text="5", command=lambda : self.update_display("5"), width="5").grid(column=1, row=0)
-    ttk.Button(second_row, text="6", command=lambda : self.update_display("6"), width="5").grid(column=2, row=0)
-    ttk.Button(second_row, text="-", command=lambda : self.update_display("-"), width="5").grid(column=3, row=0)
+    second_row.grid(column=0, row=3)
+    ttk.Button(second_row, text="4", command=lambda : self.input_number("4"), width="5").grid(column=0, row=0)
+    ttk.Button(second_row, text="5", command=lambda : self.input_number("5"), width="5").grid(column=1, row=0)
+    ttk.Button(second_row, text="6", command=lambda : self.input_number("6"), width="5").grid(column=2, row=0)
+    ttk.Button(second_row, text="-", command=lambda : self.input_operator("-"), width="5").grid(column=3, row=0)
     
     third_row = ttk.Frame(calculator_frame)
-    third_row.grid(column=0, row=2, padx=4)
-    ttk.Button(third_row, text="7", command=lambda : self.update_display("7"), width="5").grid(column=0, row=0)
-    ttk.Button(third_row, text="8", command=lambda : self.update_display("8"), width="5").grid(column=1, row=0)
-    ttk.Button(third_row, text="9", command=lambda : self.update_display("9"), width="5").grid(column=2, row=0)
-    ttk.Button(third_row, text="x", command=lambda : self.update_display("x"), width="5").grid(column=3, row=0)
+    third_row.grid(column=0, row=2)
+    ttk.Button(third_row, text="7", command=lambda : self.input_number("7"), width="5").grid(column=0, row=0)
+    ttk.Button(third_row, text="8", command=lambda : self.input_number("8"), width="5").grid(column=1, row=0)
+    ttk.Button(third_row, text="9", command=lambda : self.input_number("9"), width="5").grid(column=2, row=0)
+    ttk.Button(third_row, text="x", command=lambda : self.input_operator("x"), width="5").grid(column=3, row=0)
     
     fourth_row = ttk.Frame(calculator_frame)
-    fourth_row.grid(column=0, row=1, padx=4)
-    ttk.Button(fourth_row, text="(", command=lambda : self.update_display("("), width="5").grid(column=0, row=0)
-    ttk.Button(fourth_row, text=")", command=lambda : self.update_display(")"), width="5").grid(column=1, row=0)
-    ttk.Button(fourth_row, text="^", command=lambda : self.update_display("^"), width="5").grid(column=2, row=0)
-    ttk.Button(fourth_row, text="÷", command=lambda : self.update_display("÷"), width="5").grid(column=3, row=0)
+    fourth_row.grid(column=0, row=1)
+    ttk.Button(fourth_row, text="(", command=lambda : self.input_parentheses("("), width="5").grid(column=0, row=0)
+    ttk.Button(fourth_row, text=")", command=lambda : self.input_parentheses(")"), width="5").grid(column=1, row=0)
+    ttk.Button(fourth_row, text="^", command=lambda : self.input_operator("^"), width="5").grid(column=2, row=0)
+    ttk.Button(fourth_row, text="÷", command=lambda : self.input_operator("÷"), width="5").grid(column=3, row=0)
     
     fifth_row = ttk.Frame(calculator_frame)
-    fifth_row.grid(column=0, row=0, padx=4)
-    ttk.Button(fifth_row, text="1/x", command=lambda : self.update_display("f"), width="5").grid(column=0, row=0)
-    ttk.Button(fifth_row, text="√", command=lambda : self.update_display("√"), width="5").grid(column=1, row=0)
+    fifth_row.grid(column=0, row=0)
+    ttk.Button(fifth_row, text="%", command=lambda : self.input_operator("%"), width="5").grid(column=0, row=0)
+    ttk.Button(fifth_row, text="√", command=lambda : self.input_operator("√"), width="5").grid(column=1, row=0)
     ttk.Button(fifth_row, text="C", command=self.clear_button, width="5").grid(column=2, row=0)
-    ttk.Button(fifth_row, text="⌫", command=self.backspace_button, width="5").grid(column=3, row=0)
+    ttk.Button(fifth_row, text="⌫", command=self.backspace_input, width="5").grid(column=3, row=0)
   
   def _defualt_grid_column_weights(self, frame:tk.Misc, columns:int) -> None:
     for column in range(columns):
@@ -101,50 +103,108 @@ class MainWindow():
   
   # FUNCTION 
   
-  def press_button(self, btnPress: str) -> None:
-    self.equation.append(btnPress)
+  def input_number(self, input: str, event=None) -> None:
+    if self.output_returned:
+      self.equation_display.set("")
+      self.output_returned = False
+    self.number_input += input
+    self._manage_displayed_equation(input)
+  
+  def input_operator(self, operator: str, event=None) -> None:
+    if self.output_returned:
+      self.number_input = self.equation_display.get()
+      self.output_returned = False
+    
+    if "." in self.number_input:
+      converted_number = float(self.number_input)
+    else:
+      converted_number = int(self.number_input)
+    
+    self._manage_equation_list(True, converted_number, operator)
+    self._manage_displayed_equation(" ", operator, " ")
+    self.number_input = ""
+  
+  def input_parentheses(self, paren: str, event=None) -> None:
+    if self.output_returned:
+      self.input_operator("x", event)
+    self._manage_equation_list(True, paren)
+    self._manage_displayed_equation(paren)
+  
+  def output_answer(self, event=None) -> None:
+    self._get_last_input()
+    result = Resultant(self.ops, self.equation).execute()
+    self._display_resultant(result)
+  
+  def negate(self, event=None) -> None:
+    if self.number_input:
+      cur_equation = self.equation_display.get()
+      cur_number = cur_equation.find(self.number_input)
+      
+      if "-" in self.number_input:
+        new_eqaution = cur_equation[:cur_number] + cur_equation[(cur_number + 1):]
+        self.number_input = self.number_input[1:]
+      else:
+        new_eqaution = cur_equation[:cur_number] + "-" + cur_equation[cur_number:]
+        self.number_input = "-" + self.number_input
+      
+      self.equation_display.set(new_eqaution)
+  
+  def backspace_input(self, event=None) -> None:
+    current_equation = self.equation_display.get().rstrip()
+    updated_equation = current_equation[:-1]
+    self.equation_display.set(updated_equation)
   
   def clear_button(self, event=None) -> None:
     self.equation_display.set("")
     self.equation.clear()
   
-  def update_display(self, pressed_button: str, resultant=False, event=None) -> None:
-    if resultant:
-      self.equation_display.set(pressed_button)
-      self.equation.clear()
+  def _get_last_input(self) -> None:
+    if "." in self.number_input:
+      converted_number = float(self.number_input)
     else:
-      new_equation = self.equation_display.get() + pressed_button + " "
-      self.equation_display.set(new_equation)
-      self.press_button(pressed_button)
-  
-  def backspace_button(self, event=None) -> None:
-    current_equation = self.equation_display.get()
-    if current_equation:
-      new_equation = current_equation[:-2]
-      self.equation_display.set(new_equation)
+      converted_number = int(self.number_input)
     
-    if len(self.equation) != 0:
-      self.equation.pop()
+    self._manage_equation_list(True, converted_number)
+    self.number_input = ""
   
-  def equal(self, event=None) -> None: 
-    result = Resultant(self.ops, self.equation).execute()
-    self.update_display(result, resultant=True, event=event)
+  def _manage_equation_list(self, add_item, *args) -> None:
+    if add_item:
+      for item in args:
+        self.equation.append(item)
+    else:
+      if len(self.equation) != 0:
+        self.equation.pop()
+  
+  def _manage_displayed_equation(self, *args) -> None:
+    new_equation = self.equation_display.get()
+    for value in args:
+      new_equation += value
+    self.equation_display.set(new_equation)
+  
+  def _display_resultant(self, result) -> None:
+    self.equation_display.set(result)
+    self.equation.clear()
+    self.output_returned = True
   
   # UI SERVICES
   
   def bind_services(self) -> None:
-    self.root.bind("<BackSpace>", lambda e: self.backspace_button(e))
-    self.root.bind("<Return>", lambda e: self.equal(e))
-    self.root.bind("<parenleft>", lambda e : self.update_display("(", e))
-    self.root.bind("<parenright>", lambda e : self.update_display(")", e))
+    self.root.bind("<BackSpace>", lambda e: self.backspace_input(e))
+    self.root.bind("<Return>", lambda e: self.output_answer(e))
+    self.root.bind("<equal>", lambda e: self.output_answer(e))
+    # self.root.bind("<parenleft>", lambda e : self.input_operator("(", e))
+    # self.root.bind("<parenright>", lambda e : self.input_operator(")", e))
+    self.root.bind("<period>", lambda e : self.input_number(".", e))
     
-    self.root.bind("<asterisk>", lambda e : self.update_display("x", e))
-    self.root.bind("<KP_Multiply>", lambda e : self.update_display("x", e))
-    self.root.bind("<slash>", lambda e : self.update_display("÷", e))
-    self.root.bind("<KP_Divide>", lambda e : self.update_display("÷", e))
+    self.root.bind("<Shift-slash>", lambda e : self.input_operator("÷", e))
+    self.root.bind("<Shift-asterisk>", lambda e : self.input_operator("x", e))
+    self.root.bind("<Shift-plus>", lambda e : self.input_operator("+", e))
+    self.root.bind("<Shift-minus>", lambda e : self.input_operator("-", e))
+    self.root.bind("<Shift-percent>", lambda e : self.input_operator("%", e))
+    self.root.bind("<asciicircum>", lambda e : self.input_operator("^", e))
     
     for i in range(10):
-      self.root.bind(f"<KeyPress-{i}>", lambda e, num = i : self.update_display(f"{num}", e))
+      self.root.bind(f"<KeyPress-{i}>", lambda e, num = i : self.input_number(f"{num}", e))
   
   def build_ui(self) -> None:
     self.display_screen()

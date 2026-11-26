@@ -1,15 +1,25 @@
+import math
+import operator
+
+BODMAS = {
+  "(": 0,
+  ")": 0,
+  "÷": 1,
+  "x": 2,
+  "+": 3,
+  "-": 4
+}
+
 FUNCTIONS = {
-  "+" : "add", 
-  "-" : "subtract",
-  "x" : "multiply", 
-  "÷" : "divide", 
-  "^" : "exponentiate",
-  "1/x" : "fraction",
-  "√" : "sqrt"
+  "+" : operator.add, 
+  "-" : operator.sub,
+  "x" : operator.mul, 
+  "÷" : operator.truediv, 
+  "^" : operator.pow,
+  "%" : operator.mod,
+  "√" : lambda a: math.sqrt(a)
 }
 
 NUM_STRUCTURE = {
-  "+/-" : "negate",
-  "(" : "paren left",
-  ")" : "paren right"
+  "+/-" : operator.inv
 }
