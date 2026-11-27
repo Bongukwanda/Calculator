@@ -35,6 +35,7 @@ class Operations:
       if item in BODMAS:
         operators.append([index, BODMAS[item]])
     operators.sort(key=lambda x : x[1])
+    print("bodmas values: ", operators)
     return operators
   
   def _apply_bodmas(self):

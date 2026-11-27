@@ -174,6 +174,8 @@ class MainWindow():
     else:
       if len(self.equation) != 0:
         self.equation.pop()
+        if len(self.equation) == 0 and self.output_returned:
+          self.output_returned = False
   
   def _manage_displayed_equation(self, *args) -> None:
     new_equation = self.equation_display.get()

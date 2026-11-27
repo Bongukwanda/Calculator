@@ -20,6 +20,3 @@ FUNCTIONS = {
   "√" : lambda a: math.sqrt(a)
 }
 
-NUM_STRUCTURE = {
-  "+/-" : operator.inv
-}
