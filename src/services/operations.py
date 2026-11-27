@@ -4,9 +4,6 @@ class Operations:
   
   def calculate_result(self, equation:list):
     self.equation = equation
-    print("equation: ", equation)
-    cleanedList = self._apply_bodmas()
-    print("equation cleaned: ", cleanedList)
     result = []
     opperation = ""
     
@@ -60,9 +57,5 @@ class Operations:
         
         shunt_equation_2.append(myeq_2[eq_item])
         moved_numbers_2.append(eq_item)
-    
-    for op in bodmas_list:
-      pass
-    
     
     return shunt_equation_2
