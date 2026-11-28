@@ -2,8 +2,8 @@ import math
 import operator
 
 BODMAS = {
-  "(": 0,
-  ")": 0,
+  "(": 0.1,
+  ")": 0.2,
   "÷": 1,
   "x": 2,
   "+": 3,

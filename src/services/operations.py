@@ -6,6 +6,8 @@ class Operations:
     self.equation = equation
     result = []
     opperation = ""
+    print("original: ", self.equation)
+    print("reordered: ", self._reorder_equation())
     
     while len(self.equation) > 1:
       if isinstance(self.equation[0], (int, float)):
@@ -33,6 +35,29 @@ class Operations:
         operators.append([index, BODMAS[item]])
     operators.sort(key=lambda x : x[1])
     return operators
+  
+  def _reorder_equation(self) -> list:
+    bodmasList = self._find_bodmas()
+    pracEquation = self.equation
+    equationCounter = [x for x in range(len(pracEquation))]
+    bodmasEquation = []
+    
+    for op in bodmasList:
+      for x in range(-2, 2):
+        curIndex = op[0] + x
+        if curIndex in equationCounter:
+          if pracEquation[curIndex] == '-' and x == -2:
+            pracEquation[curIndex + 1] *= -1
+            pracEquation[curIndex] = -1
+          elif x != -2:
+            if x != 0 and len(bodmasEquation) != 0 and pracEquation[curIndex] > -1:
+              bodmasEquation.append('+')
+            bodmasEquation.append(self.equation[curIndex])
+            equationCounter[curIndex] = -1
+          else:
+            pass
+    
+    return bodmasEquation
   
   def _apply_bodmas(self):
     shunt_equation_2 = []

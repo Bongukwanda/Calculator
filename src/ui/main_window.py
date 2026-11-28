@@ -117,8 +117,10 @@ class MainWindow():
     
     if "." in self.number_input:
       converted_number = float(self.number_input)
-    else:
+    elif self.number_input.isdecimal():
       converted_number = int(self.number_input)
+    else:
+      pass
     
     self._manage_equation_list(True, converted_number, operator)
     self._manage_displayed_equation(" ", operator, " ")
